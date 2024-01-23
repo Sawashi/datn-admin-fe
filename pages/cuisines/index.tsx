@@ -3,17 +3,8 @@ import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
 
-export default function CategoryList() {
-  return (
-    <AntdListInferencer
-      fieldTransformer={(field) => {
-        if (["locale", "updatedAt", "publishedAt"].includes(field.key)) {
-          return false;
-        }
-        return field;
-      }}
-    />
-  );
+export default function CuisineList() {
+  return <div>Oh hi cuisines</div>;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -29,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         ...translateProps,
       },
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/categories")}`,
+        destination: `${redirectTo}?to=${encodeURIComponent("/cuisines")}`,
         permanent: false,
       },
     };

@@ -3,18 +3,8 @@ import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
 
-export default function BlogPostList() {
-  return (
-    <AntdListInferencer
-      fieldTransformer={(field) => {
-        if (["locale", "updatedAt", "publishedAt"].includes(field.key)) {
-          return false;
-        }
-
-        return field;
-      }}
-    />
-  );
+export default function UserList() {
+  return <div>Oh hi users</div>;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -30,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         ...translateProps,
       },
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/blog-posts")}`,
+        destination: `${redirectTo}?to=${encodeURIComponent("/users")}`,
         permanent: false,
       },
     };

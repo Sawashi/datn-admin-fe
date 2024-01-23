@@ -32,6 +32,7 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   const renderComponent = () => {
+    console.log(Component.noLayout);
     if (Component.noLayout) {
       return <Component {...pageProps} />;
     }
@@ -56,7 +57,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 
   return (
     <>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
@@ -69,21 +69,43 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                 i18nProvider={i18nProvider}
                 resources={[
                   {
-                    name: "blog-posts",
-                    list: "/blog-posts",
-                    create: "/blog-posts/create",
-                    edit: "/blog-posts/edit/:id",
-                    show: "/blog-posts/show/:id",
+                    name: "home",
+                    list: "/home",
                     meta: {
                       canDelete: true,
                     },
                   },
                   {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
+                    name: "users",
+                    list: "/users",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "posts",
+                    list: "/posts",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "recipes",
+                    list: "/recipes",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "cuisines",
+                    list: "/cuisines",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "reports",
+                    list: "/reports",
                     meta: {
                       canDelete: true,
                     },
@@ -97,11 +119,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                 }}
               >
                 {renderComponent()}
-                <RefineKbar />
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
               </Refine>
-              <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>
         </ColorModeContextProvider>

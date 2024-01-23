@@ -1,20 +1,10 @@
-import { AntdShowInferencer } from "@refinedev/inferencer/antd";
+import { AntdListInferencer } from "@refinedev/inferencer/antd";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
 
-export default function BlogPostShow() {
-  return (
-    <AntdShowInferencer
-      fieldTransformer={(field) => {
-        if (["locale", "updatedAt", "publishedAt"].includes(field.key)) {
-          return false;
-        }
-
-        return field;
-      }}
-    />
-  );
+export default function RecipesList() {
+  return <div>Oh hi recipes</div>;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -30,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         ...translateProps,
       },
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/blog-posts")}`,
+        destination: `${redirectTo}?to=${encodeURIComponent("/recipes")}`,
         permanent: false,
       },
     };
