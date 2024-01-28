@@ -90,6 +90,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                     },
                   },
                   {
+                    name: "categories",
+                    list: "/categories",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
                     name: "cuisines",
                     list: "/cuisines",
                     meta: {
