@@ -96,6 +96,7 @@ const columnsNew: TableProps<DataType>["columns"] = [
     render: () => {
       return (
         <>
+          <Button type="primary">View</Button>{" "}
           <Button type="primary" danger>
             Delete
           </Button>
@@ -109,7 +110,7 @@ const data: DataType[] = [
     key: "1",
     name: "John Brown",
     age: 32,
-    address: "Method A",
+    address: "Dish A",
     tags: "01/01/2024",
     ingredents: "A, B, C",
     image:
@@ -119,7 +120,7 @@ const data: DataType[] = [
     key: "2",
     name: "Jim Green",
     age: 42,
-    address: "Method B",
+    address: "Dish B",
     tags: "02/01/2024",
     ingredents: "A, B, C",
     image:
@@ -129,7 +130,7 @@ const data: DataType[] = [
     key: "3",
     name: "Joe Black",
     age: 32,
-    address: "Method C",
+    address: "Dish C",
     tags: "03/01/2024",
     ingredents: "A, B, C",
     image:
@@ -191,7 +192,7 @@ export default function CuisineList() {
             </div>
           </Col>
         </Row>
-        <Title level={3}>Cooking methods</Title>
+        <Title level={3}>Recipes</Title>
         <Table columns={columnsNew} dataSource={data} bordered={true} />
       </Card>
     </>
