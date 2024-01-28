@@ -83,13 +83,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                     },
                   },
                   {
-                    name: "posts",
-                    list: "/posts",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
                     name: "recipes",
                     list: "/recipes",
                     meta: {

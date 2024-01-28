@@ -13,7 +13,8 @@ interface DataType {
   ingredents: string;
   image: string;
 }
-
+import { useRouter } from "next/router";
+import Link from "next/link";
 const columns: TableProps<DataType>["columns"] = [
   {
     title: "Image",
@@ -54,7 +55,10 @@ const columns: TableProps<DataType>["columns"] = [
     render: () => {
       return (
         <>
-          <Button type="primary">View</Button>{" "}
+          <Link href="/reviews">
+            <Button type="primary">View</Button>{" "}
+          </Link>
+
           <Button type="primary" danger>
             Delete
           </Button>

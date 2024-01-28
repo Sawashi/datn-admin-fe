@@ -18,6 +18,7 @@ interface DataType {
   age: number;
   address: string;
   tags: string;
+  content: string;
 }
 
 const columns: TableProps<DataType>["columns"] = [
@@ -31,6 +32,11 @@ const columns: TableProps<DataType>["columns"] = [
     title: "Title",
     dataIndex: "address",
     key: "address",
+  },
+  {
+    title: "Content",
+    dataIndex: "content",
+    key: "content",
   },
   {
     title: "Date",
@@ -49,7 +55,6 @@ const columns: TableProps<DataType>["columns"] = [
     render: () => {
       return (
         <>
-          <Button type="primary">View</Button>{" "}
           <Button type="primary" danger>
             Delete
           </Button>
@@ -64,52 +69,32 @@ const data: DataType[] = [
     key: "1",
     name: "John Brown",
     age: 32,
-    address: "Post A",
+    address: "Dish A",
     tags: "01/01/2024",
+    content: "This is a review",
   },
   {
     key: "2",
     name: "Jim Green",
     age: 42,
-    address: "Post B",
+    address: "Dish B",
     tags: "02/01/2024",
+    content: "This is a review",
   },
   {
     key: "3",
     name: "Joe Black",
     age: 32,
-    address: "Post C",
+    address: "Dish C",
     tags: "03/01/2024",
+    content: "This is a review",
   },
 ];
-const items: TabsProps["items"] = [
-  {
-    key: "1",
-    label: "User",
-    children: <Table columns={columns} dataSource={data} />,
-  },
-  {
-    key: "2",
-    label: "Admin",
-    children: (
-      <>
-        <>
-          <div style={{ marginBottom: "16px", textAlign: "right" }}>
-            <Button type="primary" style={{ margin: "8px 0" }}>
-              Create new post
-            </Button>
-          </div>
-          <Table columns={columns} dataSource={data} />
-        </>
-      </>
-    ),
-  },
-];
-export default function PostList() {
+export default function reviewList() {
   return (
     <>
-      <Title level={2}>Manage posts</Title>
-      <Tabs defaultActiveKey="1" items={items} />
+      <Title level={2}>Manage reviews</Title>
+      <Table columns={columns} dataSource={data} />
     </>
   );
 }
@@ -127,7 +112,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         ...translateProps,
       },
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/posts")}`,
+        destination: `${redirectTo}?to=${encodeURIComponent("/reviews")}`,
         permanent: false,
       },
     };
