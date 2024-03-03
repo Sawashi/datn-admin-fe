@@ -78,59 +78,82 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   }, []);
   return (
     <>
-      <ColorModeContextProvider>
-        <Refine
-          routerProvider={routerProvider}
-          authProvider={authProvider}
-          dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
-          resources={[
-            {
-              name: "home",
-              list: "/home",
-              meta: {
-                canDelete: true,
-              },
-            },
-            {
-              name: "users",
-              list: "/users",
-              meta: {
-                canDelete: true,
-              },
-            },
-            {
-              name: "recipes",
-              list: "/recipes",
-              meta: {
-                canDelete: true,
-              },
-            },
-            {
-              name: "categories",
-              list: "/categories",
-              meta: {
-                canDelete: true,
-              },
-            },
-            {
-              name: "cuisines",
-              list: "/cuisines",
-              meta: {
-                canDelete: true,
-              },
-            },
-            {
-              name: "reports",
-              list: "/reports",
-              meta: {
-                canDelete: true,
-              },
-            },
-          ]}
-        >
-          {renderComponent()}
-        </Refine>
-      </ColorModeContextProvider>
+      <RefineKbarProvider>
+        <ColorModeContextProvider>
+          <AntdApp>
+            <DevtoolsProvider>
+              <Refine
+                routerProvider={routerProvider}
+                authProvider={authProvider}
+                dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
+                notificationProvider={useNotificationProvider}
+                i18nProvider={i18nProvider}
+                resources={[
+                  {
+                    name: "home",
+                    list: "/home",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "users",
+                    list: "/users",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "recipes",
+                    list: "/recipes",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "categories",
+                    list: "/categories",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "cuisines",
+                    list: "/cuisines",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "reports",
+                    list: "/reports",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "reviews",
+                    list: "/reviews",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                ]}
+                options={{
+                  syncWithLocation: true,
+                  warnWhenUnsavedChanges: true,
+                  useNewQueryKeys: true,
+                  projectId: "1XYds8-6fPE5e-LROGnY",
+                }}
+              >
+                {renderComponent()}
+                <UnsavedChangesNotifier />
+                <DocumentTitleHandler />
+              </Refine>
+            </DevtoolsProvider>
+          </AntdApp>
+        </ColorModeContextProvider>
+      </RefineKbarProvider>
     </>
   );
 }

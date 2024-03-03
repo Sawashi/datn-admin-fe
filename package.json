@@ -25,12 +25,14 @@
     "@refinedev/strapi-v4": "^6.0.1",
     "antd": "^5.0.5",
     "axios": "^1.6.2",
+    "dayjs": "^1.11.10",
     "next": "^13.0.6",
     "next-i18next": "^8.9.0",
     "nookies": "^2.5.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "recharts": "^2.10.4"
+    "recharts": "^2.10.4",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
