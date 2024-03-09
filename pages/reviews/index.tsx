@@ -60,7 +60,7 @@ const columns: ColumnsType<Review> = [
 
 async function getData() {
   try {
-    const res = await fetch('http://localhost:3000/reviews');
+    const res = await fetch(`http://localhost:3000/reviews`);
 
     return res.json();
   } catch (e) {
