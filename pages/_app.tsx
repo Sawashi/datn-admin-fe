@@ -21,6 +21,8 @@ import { App as AntdApp } from "antd";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import { authProvider, axiosInstance } from "src/authProvider";
 import { API_URL } from "src/constants";
+import CustomSlider from "@components/customSlider";
+import { useState } from "react";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -31,6 +33,10 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
+  const [selectedKey, setSelectedKey] = useState("1");
+  const setSelectedKeyHandler = (key: string) => {
+    setSelectedKey(key);
+  };
   const renderComponent = () => {
     console.log(Component.noLayout);
     if (Component.noLayout) {
@@ -40,7 +46,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     return (
       <ThemedLayoutV2
         Header={() => <Header sticky />}
-        Sider={(props) => <ThemedSiderV2 {...props} fixed />}
+        Sider={() => (
+          <CustomSlider
+            selectedKey={selectedKey}
+            setSelectedKey={setSelectedKeyHandler}
+          />
+        )}
       >
         <Component {...pageProps} />
       </ThemedLayoutV2>
@@ -57,75 +68,59 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 
   return (
     <>
-      <RefineKbarProvider>
-        <ColorModeContextProvider>
-          <AntdApp>
-            <DevtoolsProvider>
-              <Refine
-                routerProvider={routerProvider}
-                authProvider={authProvider}
-                dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
-                notificationProvider={useNotificationProvider}
-                i18nProvider={i18nProvider}
-                resources={[
-                  {
-                    name: "home",
-                    list: "/home",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "users",
-                    list: "/users",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "recipes",
-                    list: "/recipes",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "categories",
-                    list: "/categories",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "cuisines",
-                    list: "/cuisines",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "reports",
-                    list: "/reports",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                ]}
-                options={{
-                  syncWithLocation: true,
-                  warnWhenUnsavedChanges: true,
-                  useNewQueryKeys: true,
-                  projectId: "1XYds8-6fPE5e-LROGnY",
-                }}
-              >
-                {renderComponent()}
-                <UnsavedChangesNotifier />
-                <DocumentTitleHandler />
-              </Refine>
-            </DevtoolsProvider>
-          </AntdApp>
-        </ColorModeContextProvider>
-      </RefineKbarProvider>
+      <ColorModeContextProvider>
+        <Refine
+          routerProvider={routerProvider}
+          authProvider={authProvider}
+          dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
+          resources={[
+            {
+              name: "home",
+              list: "/home",
+              meta: {
+                canDelete: true,
+              },
+            },
+            {
+              name: "users",
+              list: "/users",
+              meta: {
+                canDelete: true,
+              },
+            },
+            {
+              name: "recipes",
+              list: "/recipes",
+              meta: {
+                canDelete: true,
+              },
+            },
+            {
+              name: "categories",
+              list: "/categories",
+              meta: {
+                canDelete: true,
+              },
+            },
+            {
+              name: "cuisines",
+              list: "/cuisines",
+              meta: {
+                canDelete: true,
+              },
+            },
+            {
+              name: "reports",
+              list: "/reports",
+              meta: {
+                canDelete: true,
+              },
+            },
+          ]}
+        >
+          {renderComponent()}
+        </Refine>
+      </ColorModeContextProvider>
     </>
   );
 }

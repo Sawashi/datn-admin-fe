@@ -4,39 +4,34 @@ import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
 import { Typography } from "antd";
+import { getAllUserData, User } from "src/apis/users";
+import { useEffect, useState } from "react";
 const { Title } = Typography;
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string;
-}
 
-const columns: TableProps<DataType>["columns"] = [
+const columns: TableProps<User>["columns"] = [
   {
     title: "ID",
-    dataIndex: "age",
-    key: "age",
+    dataIndex: "id",
+    key: "id",
   },
   {
     title: "Name",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "username",
+    key: "username",
     render: (text) => <a>{text}</a>,
   },
   {
     title: "Role",
-    dataIndex: "address",
-    key: "address",
+    dataIndex: "role",
+    key: "role",
   },
   {
     title: "Status",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags) => (
+    key: "status",
+    dataIndex: "status",
+    render: (status) => (
       <>
-        {tags === "good" ? (
+        {status === "good" ? (
           <Tag color="green">Good</Tag>
         ) : (
           <Tag color="red">Banned</Tag>
@@ -46,13 +41,13 @@ const columns: TableProps<DataType>["columns"] = [
   },
   {
     title: "Action",
-    dataIndex: "address", // Change to "address" to check admin status
-    key: "address",
-    render: (address, record) => {
-      const isAdmin = address.toLowerCase() === "admin"; // Replace with your actual admin check logic
+    dataIndex: "role", // Change to "role" to check admin status
+    key: "role",
+    render: (role, record) => {
+      const isAdmin = role.toLowerCase() === "admin"; // Replace with your actual admin check logic
       return (
         <>
-          {isAdmin ? null : record.tags === "good" ? (
+          {isAdmin ? null : record.status === "good" ? (
             <Button type="primary" danger>
               Ban
             </Button>
@@ -65,34 +60,28 @@ const columns: TableProps<DataType>["columns"] = [
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "Admin",
-    tags: "good",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "User",
-    tags: "banned",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "User",
-    tags: "good",
-  },
-];
 export default function UserList() {
+  const [data, setData] = useState<User[]>([]);
+  useEffect(() => {
+    const fetchAllUser = async () => {
+      try {
+        const rawData = await getAllUserData();
+        console.log("Raw data: ", rawData); // Fix: Log the raw data to see the structure
+        setData(rawData); // Fix: Pass an array of users to setData
+      } catch (error) {
+        console.log("Something went wrong when get user data");
+      }
+    };
+    fetchAllUser();
+  }, []);
   return (
     <>
       <Title level={2}>Manage user</Title>
-      <Table columns={columns} dataSource={data} />
+      {data.length > 0 ? (
+        <Table columns={columns} dataSource={data} />
+      ) : (
+        <Table columns={columns} />
+      )}
     </>
   );
 }

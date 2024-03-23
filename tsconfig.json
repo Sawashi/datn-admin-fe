@@ -50,7 +50,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/apis/users.js"  ],
   "exclude": [
     "node_modules"
   ]
