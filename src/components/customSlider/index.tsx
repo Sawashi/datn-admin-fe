@@ -7,6 +7,7 @@ import {
   BookOutlined,
   AppstoreOutlined,
   EnvironmentOutlined,
+  StarOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import { TitleProps } from "@refinedev/core/dist/interfaces";
@@ -80,23 +81,26 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
         onSelect={handleMenuSelect}
         mode="inline"
       >
-        <Menu.Item key="1" icon={<HomeOutlined />}>
+        <Menu.Item key="home" icon={<HomeOutlined />}>
           <Link href="/home">Home</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<UserOutlined />}>
+        <Menu.Item key="users" icon={<UserOutlined />}>
           <Link href="/users">Users</Link>
         </Menu.Item>
-        <Menu.Item key="3" icon={<BookOutlined />}>
+        <Menu.Item key="recipes" icon={<BookOutlined />}>
           <Link href="/recipes">Recipes</Link>
         </Menu.Item>
-        <Menu.Item key="4" icon={<AppstoreOutlined />}>
+        <Menu.Item key="categories" icon={<AppstoreOutlined />}>
           <Link href="/categories">Categories</Link>
         </Menu.Item>
-        <Menu.Item key="5" icon={<EnvironmentOutlined />}>
+        <Menu.Item key="cuisines" icon={<EnvironmentOutlined />}>
           <Link href="/cuisines">Cuisines</Link>
         </Menu.Item>
-        <Menu.Item key="6" icon={<SolutionOutlined />}>
+        <Menu.Item key="reports" icon={<SolutionOutlined />}>
           <Link href="/reports">Reports</Link>
+        </Menu.Item>
+        <Menu.Item key="reviews" icon={<StarOutlined />}>
+          <Link href="/reviews">Reviews</Link>
         </Menu.Item>
       </Menu>
       <Button
