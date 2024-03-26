@@ -1,7 +1,7 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { authProvider } from "src/authProvider";
+import { AntdListInferencer } from '@refinedev/inferencer/antd';
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { authProvider } from 'src/authProvider';
 import {
   Button,
   Table,
@@ -10,91 +10,79 @@ import {
   TabsProps,
   Tag,
   Typography,
-} from "antd";
+  Rate,
+} from 'antd';
+import { Review } from './review.type';
+import DateRow from 'components/DateRow';
+import { formatDate } from 'utils';
+import TableCustom from 'components/TableCustom';
+import { ColumnsType } from 'antd/es/table';
+import TooltipLineClamp from 'components/TooltipLineClamp';
 const { Title } = Typography;
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string;
-  content: string;
-}
 
-const columns: TableProps<DataType>["columns"] = [
+const columns: ColumnsType<Review> = [
   {
-    title: "Author",
-    dataIndex: "name",
-    key: "name",
+    title: 'Author',
+    dataIndex: 'userId',
+    key: 'userId',
     render: (text) => <a>{text}</a>,
   },
   {
-    title: "Title",
-    dataIndex: "address",
-    key: "address",
+    title: 'Dish',
+    dataIndex: 'dishId',
+    key: 'dishId',
   },
   {
-    title: "Content",
-    dataIndex: "content",
-    key: "content",
+    title: 'Content',
+    dataIndex: 'content',
+    key: 'content',
+    render: (text) => <div>{text}</div>,
   },
   {
-    title: "Date",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags) => (
-      <>
-        <text>{tags}</text>
-      </>
-    ),
+    title: 'Rating',
+    dataIndex: 'rating',
+    key: 'rating',
+    render: (rating) => <Rate value={rating} disabled />,
   },
   {
-    title: "Action",
-    dataIndex: "address", // Change to "address" to check admin status
-    key: "address",
-    render: () => {
-      return (
-        <>
-          <Button type="primary" danger>
-            Delete
-          </Button>
-        </>
-      );
-    },
+    title: 'Created At',
+    key: 'createdAt',
+    dataIndex: 'createdAt',
+    render: (text) => <DateRow date={text} />,
+  },
+  {
+    title: 'Updated At',
+    key: 'updatedAt',
+    dataIndex: 'updatedAt',
+    render: (text) => <DateRow date={text} />,
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "Dish A",
-    tags: "01/01/2024",
-    content: "This is a review",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "Dish B",
-    tags: "02/01/2024",
-    content: "This is a review",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Dish C",
-    tags: "03/01/2024",
-    content: "This is a review",
-  },
-];
-export default function reviewList() {
+async function getData() {
+  try {
+    const res = await fetch(`http://localhost:3000/reviews`);
+
+    return res.json();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export default function Page({ data }: { data: Review[] }) {
   return (
     <>
       <Title level={2}>Manage reviews</Title>
-      <Table columns={columns} dataSource={data} />
+      <TableCustom
+        columns={columns}
+        data={data}
+        hasEdit
+        hasDelete
+        onSelectedRow={() => {}}
+        onEdit={(value) => {
+          // setOpenManageZoomModal(true);
+          // setSelectedBooking(value);
+        }}
+      />
     </>
   );
 }
@@ -102,8 +90,10 @@ export default function reviewList() {
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
+  const data = await getData();
+
+  const translateProps = await serverSideTranslations(context.locale ?? 'en', [
+    'common',
   ]);
 
   if (!authenticated) {
@@ -112,7 +102,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         ...translateProps,
       },
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/reviews")}`,
+        destination: `${redirectTo}?to=${encodeURIComponent('/reviews')}`,
         permanent: false,
       },
     };
@@ -121,6 +111,8 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   return {
     props: {
       ...translateProps,
+      data,
     },
   };
 };
+

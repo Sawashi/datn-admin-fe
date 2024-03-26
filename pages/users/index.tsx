@@ -1,84 +1,89 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
-import { Button, Space, Table, TableProps, Tag } from "antd";
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { authProvider } from "src/authProvider";
-import { Typography } from "antd";
-import { getAllUserData, User } from "src/apis/users";
-import { useEffect, useState } from "react";
-import TableCustom from "components/TableCustom";
-const { Title } = Typography;
+import { AntdListInferencer } from '@refinedev/inferencer/antd'
+import { Button, Space, Table, TableProps, Tag } from 'antd'
+import { GetServerSideProps } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { authProvider } from 'src/authProvider'
+import { Typography } from 'antd'
+import { getAllUserData, User } from 'src/apis/users'
+import { useEffect, useState } from 'react'
+import TableCustom from 'components/TableCustom'
+const { Title } = Typography
+interface DataType {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  imgUrl: string
+  gender: string
+  description: string
+  dateOfBirth: string
+}
 
-const columns: TableProps<User>["columns"] = [
+const columns: ColumnsType<DataType> = [
   {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
   },
   {
-    title: "Name",
-    dataIndex: "username",
-    key: "username",
-    render: (text) => <a>{text}</a>,
+    title: 'Image',
+    dataIndex: 'imgUrl',
+    key: 'imgUrl',
+    render: (imgUrl) => <img src={imgUrl} width={100} />,
   },
   {
-    title: "Role",
-    dataIndex: "role",
-    key: "role",
+    title: 'Name',
+    dataIndex: 'firstName',
+    key: 'name',
+    render: (text, record) => <a>{`${record.lastName} ${record.firstName}`}</a>,
   },
   {
-    title: "Status",
-    key: "status",
-    dataIndex: "status",
-    render: (status) => (
-      <>
-        {status === "good" ? (
-          <Tag color="green">Good</Tag>
-        ) : (
-          <Tag color="red">Banned</Tag>
-        )}
-      </>
-    ),
+    title: 'Email',
+    dataIndex: 'email',
+    key: 'email',
   },
   {
-    title: "Action",
-    dataIndex: "role", // Change to "role" to check admin status
-    key: "role",
+    title: 'Action',
+    dataIndex: 'role', // Change to "role" to check admin status
+    key: 'role',
     render: (role, record) => {
-      const isAdmin = role === "admin"; // Replace with your actual admin check logic
+      const isAdmin = role === 'admin' // Replace with your actual admin check logic
       return (
         <>
-          {isAdmin ? null : record.status === "good" ? (
-            <Button type="primary" danger>
-              Ban
+          {isMale ? (
+            <Button type='primary' danger>
+              Male
             </Button>
           ) : (
-            <Button type="primary">Unban</Button>
+            <Button type='primary'>Female</Button>
           )}
         </>
-      );
+      )
     },
   },
-];
+  {
+    title: 'Date of birth',
+    dataIndex: 'dateOfBirth',
+    key: 'dateOfBirth',
+  },
+]
 
-export default function UserList() {
-  const [data, setData] = useState<User[]>([]);
-  useEffect(() => {
-    const fetchAllUser = async () => {
-      try {
-        const rawData = await getAllUserData();
-        console.log("Raw data: ", rawData); // Fix: Log the raw data to see the structure
-        setData(rawData); // Fix: Pass an array of users to setData
-      } catch (error) {
-        console.log("Something went wrong when get user data");
-      }
-    };
-    fetchAllUser();
-  }, []);
+async function getData() {
+  try {
+    const res = await fetch(`http://localhost:3000/users`)
+
+    return res.json()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export default function UserList({ data }: { data: any }) {
   return (
     <>
       <Title level={2}>Manage user</Title>
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         <TableCustom
           columns={columns || []} // Fix: Add default value for columns
           data={data}
@@ -91,15 +96,15 @@ export default function UserList() {
         <Table columns={columns || []} /> // Fix: Add default value for columns
       )}
     </>
-  );
+  )
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const { authenticated, redirectTo } = await authProvider.check(context);
+  const { authenticated, redirectTo } = await authProvider.check(context)
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
-  ]);
+  const translateProps = await serverSideTranslations(context.locale ?? 'en', [
+    'common',
+  ])
 
   if (!authenticated) {
     return {
@@ -107,15 +112,16 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         ...translateProps,
       },
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/users")}`,
+        destination: `${redirectTo}?to=${encodeURIComponent('/users')}`,
         permanent: false,
       },
-    };
+    }
   }
 
   return {
     props: {
       ...translateProps,
     },
-  };
-};
+  }
+}
+
