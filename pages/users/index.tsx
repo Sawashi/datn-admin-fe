@@ -1,23 +1,23 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
-import { Button, Space, Table, TableProps, Tag } from "antd";
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { authProvider } from "src/authProvider";
-import { Typography } from "antd";
-import { getAllUserData, User } from "src/apis/users";
-import { useEffect, useState } from "react";
-import TableCustom from "components/TableCustom";
-const { Title } = Typography;
+import { AntdListInferencer } from '@refinedev/inferencer/antd'
+import { Button, Space, Table, TableProps, Tag } from 'antd'
+import { GetServerSideProps } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { authProvider } from 'src/authProvider'
+import { Typography } from 'antd'
+import { getAllUserData, User } from 'src/apis/users'
+import { useEffect, useState } from 'react'
+import TableCustom from 'components/TableCustom'
+const { Title } = Typography
 interface DataType {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  imgUrl: string;
-  gender: string;
-  description: string;
-  dateOfBirth: string;
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  imgUrl: string
+  gender: string
+  description: string
+  dateOfBirth: string
 }
 
 const columns: ColumnsType<DataType> = [
@@ -44,11 +44,11 @@ const columns: ColumnsType<DataType> = [
     key: 'email',
   },
   {
-    title: "Action",
-    dataIndex: "role", // Change to "role" to check admin status
-    key: "role",
+    title: 'Action',
+    dataIndex: 'role', // Change to "role" to check admin status
+    key: 'role',
     render: (role, record) => {
-      const isAdmin = role === "admin"; // Replace with your actual admin check logic
+      const isAdmin = role === 'admin' // Replace with your actual admin check logic
       return (
         <>
           {isMale ? (
@@ -59,7 +59,7 @@ const columns: ColumnsType<DataType> = [
             <Button type='primary'>Female</Button>
           )}
         </>
-      );
+      )
     },
   },
   {
@@ -67,15 +67,15 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'dateOfBirth',
     key: 'dateOfBirth',
   },
-];
+]
 
 async function getData() {
   try {
-    const res = await fetch(`http://localhost:3000/users`);
+    const res = await fetch(`http://localhost:3000/users`)
 
-    return res.json();
+    return res.json()
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 }
 
@@ -83,7 +83,7 @@ export default function UserList({ data }: { data: any }) {
   return (
     <>
       <Title level={2}>Manage user</Title>
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         <TableCustom
           columns={columns || []} // Fix: Add default value for columns
           data={data}
@@ -96,15 +96,15 @@ export default function UserList({ data }: { data: any }) {
         <Table columns={columns || []} /> // Fix: Add default value for columns
       )}
     </>
-  );
+  )
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const { authenticated, redirectTo } = await authProvider.check(context);
+  const { authenticated, redirectTo } = await authProvider.check(context)
 
   const translateProps = await serverSideTranslations(context.locale ?? 'en', [
     'common',
-  ]);
+  ])
 
   if (!authenticated) {
     return {
@@ -115,13 +115,13 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         destination: `${redirectTo}?to=${encodeURIComponent('/users')}`,
         permanent: false,
       },
-    };
+    }
   }
 
   return {
     props: {
       ...translateProps,
     },
-  };
-};
+  }
+}
 
