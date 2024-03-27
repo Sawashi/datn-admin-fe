@@ -6,4 +6,3 @@ export interface Review {
   createdAt: string;
   updatedAt: string;
 }
-

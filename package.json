@@ -15,6 +15,7 @@
   "dependencies": {
     "@ant-design/charts": "^2.0.3",
     "@ant-design/icons": "^5.0.1",
+    "@reduxjs/toolkit": "^2.2.2",
     "@refinedev/antd": "^5.37.1",
     "@refinedev/cli": "^2.16.21",
     "@refinedev/core": "^4.46.1",
@@ -30,7 +31,8 @@
     "nookies": "^2.5.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "recharts": "^2.10.4"
+    "recharts": "^2.10.4",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",

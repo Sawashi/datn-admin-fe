@@ -1,7 +1,7 @@
-import { Tooltip } from 'antd';
-import { TooltipPlacement } from 'antd/lib/tooltip';
-import { useEffect, useRef, useState } from 'react';
-import { TextLineClamp } from 'styles/common/Common.style';
+import { Tooltip } from "antd";
+import { TooltipPlacement } from "antd/lib/tooltip";
+import { useEffect, useRef, useState } from "react";
+import { TextLineClamp } from "styles/common/Common.style";
 
 interface Props {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ const TooltipLineClamp = (props: Props): JSX.Element => {
       const isOverflowed = ref.current.scrollHeight > ref.current.clientHeight;
       setIsTextOverflowed(isOverflowed);
       if (
-        typeof props.children === 'string' &&
+        typeof props.children === "string" &&
         props.textLength &&
         props.children.length > props.textLength
       ) {
@@ -30,7 +30,7 @@ const TooltipLineClamp = (props: Props): JSX.Element => {
 
   return (
     <Tooltip
-      title={isTextOverflowed ? props.children : ''}
+      title={isTextOverflowed ? props.children : ""}
       placement={props?.placement}
     >
       <TextLineClamp ref={ref} $line={props.line || 1}>
@@ -41,4 +41,3 @@ const TooltipLineClamp = (props: Props): JSX.Element => {
 };
 
 export default TooltipLineClamp;
-
