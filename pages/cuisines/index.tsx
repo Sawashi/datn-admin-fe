@@ -14,130 +14,74 @@ import {
   Col,
   Row,
 } from "antd";
+import TableCustom from "components/TableCustom";
+import { ColumnsType } from "antd/es/table";
 
-const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
-const headerStyle: React.CSSProperties = {
-  textAlign: "center",
-  color: "#fff",
-  height: 64,
-  paddingInline: 48,
-  lineHeight: "64px",
-  backgroundColor: "#4096ff",
-};
 
-const contentStyle: React.CSSProperties = {
-  textAlign: "center",
-  minHeight: 120,
-  lineHeight: "120px",
-  color: "#fff",
-  backgroundColor: "#0958d9",
-};
-
-const siderStyle: React.CSSProperties = {
-  textAlign: "center",
-  lineHeight: "120px",
-  color: "#fff",
-  backgroundColor: "#1677ff",
-};
-
-const footerStyle: React.CSSProperties = {
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#4096ff",
-};
-
-const layoutStyle = {
-  borderRadius: 8,
-  overflow: "hidden",
-};
-
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string;
-  ingredents: string;
-  image: string;
+export interface DataType {
+  id: string;
+  imgUrl: string;
+  cuisineName: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 }
-const columnsNew: TableProps<DataType>["columns"] = [
-  {
-    title: "Image",
-    key: "image",
-    dataIndex: "image",
-    render: (image) => <Image src={image} width={100} />,
-  },
-  {
-    title: "Author",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Name",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Date",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags) => (
-      <>
-        <text>{tags}</text>
-      </>
-    ),
-  },
-  {
-    title: "Action",
-    dataIndex: "address", // Change to "address" to check admin status
-    key: "address",
-    render: () => {
-      return (
-        <>
-          <Button type="primary">View</Button>{" "}
-          <Button type="primary" danger>
-            Delete
-          </Button>
-        </>
-      );
+
+async function getData() {
+  try {
+    const res = await fetch(`http://localhost:3000/cuisines`);
+
+    return res.json();
+  } catch (e) {
+    console.log(e);
+  }
+}
+export default function CuisineList({ data }: { data: any }) {
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Image",
+      key: "imgUrl",
+      dataIndex: "imgUrl",
+      render: (imgUrl) => <Image src={imgUrl} width={100} />,
     },
-  },
-];
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "Dish A",
-    tags: "01/01/2024",
-    ingredents: "A, B, C",
-    image:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "Dish B",
-    tags: "02/01/2024",
-    ingredents: "A, B, C",
-    image:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Dish C",
-    tags: "03/01/2024",
-    ingredents: "A, B, C",
-    image:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  },
-];
-export default function CuisineList() {
+    {
+      title: "Name",
+      dataIndex: "cuisineName",
+      key: "cuisineName",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Created At",
+      key: "createdAt",
+      dataIndex: "createdAt",
+    },
+    {
+      title: "Updated At",
+      key: "updatedAt",
+      dataIndex: "updatedAt",
+    },
+    // {
+    //   title: 'Action',
+    //   dataIndex: 'address', // Change to "address" to check admin status
+    //   key: 'address',
+    //   render: () => {
+    //     return (
+    //       <>
+    //         <Button type='primary'>View</Button>{' '}
+    //         <Button type='primary' danger>
+    //           Delete
+    //         </Button>
+    //       </>
+    //     );
+    //   },
+    // },
+  ];
   return (
     <>
       <Title level={2}>Manage Cuisines</Title>
@@ -193,7 +137,14 @@ export default function CuisineList() {
           </Col>
         </Row>
         <Title level={3}>Recipes</Title>
-        <Table columns={columnsNew} dataSource={data} bordered={true} />
+        <TableCustom
+          columns={columns}
+          data={data}
+          hasEdit
+          hasDelete
+          onSelectedRow={() => {}}
+          onEdit={(value) => {}}
+        />
       </Card>
     </>
   );
@@ -201,6 +152,8 @@ export default function CuisineList() {
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
+
+  const data = await getData();
 
   const translateProps = await serverSideTranslations(context.locale ?? "en", [
     "common",
@@ -221,6 +174,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   return {
     props: {
       ...translateProps,
+      data,
     },
   };
 };
