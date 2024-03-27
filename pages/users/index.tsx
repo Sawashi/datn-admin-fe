@@ -6,6 +6,7 @@ import { authProvider } from "src/authProvider";
 import { Typography } from "antd";
 import { getAllUserData, User } from "src/apis/users";
 import { useEffect, useState } from "react";
+import TableCustom from "components/TableCustom";
 const { Title } = Typography;
 
 const columns: TableProps<User>["columns"] = [
@@ -44,7 +45,7 @@ const columns: TableProps<User>["columns"] = [
     dataIndex: "role", // Change to "role" to check admin status
     key: "role",
     render: (role, record) => {
-      const isAdmin = role.toLowerCase() === "admin"; // Replace with your actual admin check logic
+      const isAdmin = role === "admin"; // Replace with your actual admin check logic
       return (
         <>
           {isAdmin ? null : record.status === "good" ? (
@@ -78,9 +79,16 @@ export default function UserList() {
     <>
       <Title level={2}>Manage user</Title>
       {data.length > 0 ? (
-        <Table columns={columns} dataSource={data} />
+        <TableCustom
+          columns={columns || []} // Fix: Add default value for columns
+          data={data}
+          hasEdit
+          hasDelete
+          onSelectedRow={() => {}}
+          onEdit={(value) => {}}
+        />
       ) : (
-        <Table columns={columns} />
+        <Table columns={columns || []} /> // Fix: Add default value for columns
       )}
     </>
   );

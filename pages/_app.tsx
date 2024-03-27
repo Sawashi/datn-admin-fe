@@ -22,7 +22,8 @@ import { appWithTranslation, useTranslation } from "next-i18next";
 import { authProvider, axiosInstance } from "src/authProvider";
 import { API_URL } from "src/constants";
 import CustomSlider from "@components/customSlider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -33,6 +34,12 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
+  const router = useRouter();
+  const { pathname } = router;
+
+  // Split the pathname by '/' and get the last segment
+  const pathSegments = pathname.split("/");
+  const lastSegment = pathSegments[pathSegments.length - 1];
   const [selectedKey, setSelectedKey] = useState("1");
   const setSelectedKeyHandler = (key: string) => {
     setSelectedKey(key);
@@ -66,6 +73,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     getLocale: () => i18n.language,
   };
 
+  useEffect(() => {
+    setSelectedKey(lastSegment);
+  }, []);
   return (
     <>
       <ColorModeContextProvider>
