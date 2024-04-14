@@ -1,6 +1,3 @@
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { authProvider } from "src/authProvider";
 import { Button, Card, Image, Typography, Col, Row } from "antd";
 import TableCustom from "components/TableCustom";
 import { ColumnsType } from "antd/es/table";
@@ -122,25 +119,3 @@ export default function CuisineList({ data }: { data: any }) {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const { authenticated, redirectTo } = await authProvider.check(context);
-
-  const data = await getData();
-
-  if (!authenticated) {
-    return {
-      props: {},
-      redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/cuisines")}`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      data,
-    },
-  };
-};
