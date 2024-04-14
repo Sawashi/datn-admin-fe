@@ -1,8 +1,9 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
 import { Button, Image, Table, TableProps, Typography } from "antd";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
+import Link from "next/link";
+
 const { Title } = Typography;
 interface DataType {
   key: string;
@@ -13,8 +14,7 @@ interface DataType {
   ingredents: string;
   image: string;
 }
-import { useRouter } from "next/router";
-import Link from "next/link";
+
 const columns: TableProps<DataType>["columns"] = [
   {
     title: "Image",
@@ -169,15 +169,9 @@ export default function RecipesList() {
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
-  ]);
-
   if (!authenticated) {
     return {
-      props: {
-        ...translateProps,
-      },
+      props: {},
       redirect: {
         destination: `${redirectTo}?to=${encodeURIComponent("/recipes")}`,
         permanent: false,
@@ -186,8 +180,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   }
 
   return {
-    props: {
-      ...translateProps,
-    },
+    props: {},
   };
 };

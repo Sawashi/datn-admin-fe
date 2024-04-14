@@ -14,10 +14,6 @@ Register.noLayout = true;
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated } = await authProvider.check(context);
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
-  ]);
-
   if (authenticated) {
     return {
       props: {},
@@ -29,8 +25,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   }
 
   return {
-    props: {
-      ...translateProps,
-    },
+    props: {},
   };
 };

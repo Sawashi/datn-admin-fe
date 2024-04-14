@@ -1,4 +1,3 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
 import {
   Button,
   Table,
@@ -276,15 +275,9 @@ export default function ReportList() {
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
-  ]);
-
   if (!authenticated) {
     return {
-      props: {
-        ...translateProps,
-      },
+      props: {},
       redirect: {
         destination: `${redirectTo}?to=${encodeURIComponent("/reports")}`,
         permanent: false,
@@ -293,8 +286,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   }
 
   return {
-    props: {
-      ...translateProps,
-    },
+    props: {},
   };
 };

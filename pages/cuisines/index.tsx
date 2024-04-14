@@ -1,19 +1,7 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-import {
-  Button,
-  Card,
-  Image,
-  Layout,
-  Table,
-  TableProps,
-  Typography,
-  Flex,
-  Col,
-  Row,
-} from "antd";
+import { Button, Card, Image, Typography, Col, Row } from "antd";
 import TableCustom from "components/TableCustom";
 import { ColumnsType } from "antd/es/table";
 
@@ -30,11 +18,11 @@ export interface DataType {
 
 async function getData() {
   try {
-    const res = await fetch(`http://localhost:3000/cuisines`);
-
+    const res = await fetch(`https://datn-admin-be.onrender.com/cuisines`);
     return res.json();
   } catch (e) {
     console.log(e);
+    return {};
   }
 }
 export default function CuisineList({ data }: { data: any }) {
@@ -66,21 +54,6 @@ export default function CuisineList({ data }: { data: any }) {
       key: "updatedAt",
       dataIndex: "updatedAt",
     },
-    // {
-    //   title: 'Action',
-    //   dataIndex: 'address', // Change to "address" to check admin status
-    //   key: 'address',
-    //   render: () => {
-    //     return (
-    //       <>
-    //         <Button type='primary'>View</Button>{' '}
-    //         <Button type='primary' danger>
-    //           Delete
-    //         </Button>
-    //       </>
-    //     );
-    //   },
-    // },
   ];
   return (
     <>
@@ -155,15 +128,9 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
   const data = await getData();
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
-  ]);
-
   if (!authenticated) {
     return {
-      props: {
-        ...translateProps,
-      },
+      props: {},
       redirect: {
         destination: `${redirectTo}?to=${encodeURIComponent("/cuisines")}`,
         permanent: false,
@@ -173,7 +140,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
   return {
     props: {
-      ...translateProps,
       data,
     },
   };

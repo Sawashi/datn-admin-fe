@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { EditOutlined } from '@ant-design/icons';
-import { Button, Empty, Table, Tooltip } from 'antd';
+import { EditOutlined } from "@ant-design/icons";
+import { Button, Empty, Table, Tooltip } from "antd";
 import {
   ColumnsType,
   TablePaginationConfig,
   TableRowSelection,
-} from 'antd/es/table/interface';
-import { theme } from 'constants/common';
-import { useEffect, useState } from 'react';
-import { TableWrapperStyled } from './TableCustom.style';
+} from "antd/es/table/interface";
+import { theme } from "constants/common";
+import { useEffect, useState } from "react";
+import { TableWrapperStyled } from "./TableCustom.style";
 
 type P_Props<T extends Record<string, any>> = {
   columns: ColumnsType<T>;
@@ -50,9 +50,9 @@ function TableCustom<T extends Record<string, any>>({
   const editColumn = [
     Table.SELECTION_COLUMN,
     {
-      title: '',
-      align: 'left',
-      fixed: 'left',
+      title: "",
+      align: "left",
+      fixed: "left",
       width: 65,
       render: (value: any, record: any) => {
         if (disableReason)
@@ -61,7 +61,7 @@ function TableCustom<T extends Record<string, any>>({
               <Button
                 disabled={disableEditCondition && disableEditCondition(record)}
                 style={{
-                  width: '33px',
+                  width: "33px",
                 }}
                 // onClick={() => OtherUtil.loadCallback(onEdit, value)}
                 icon={<EditOutlined style={{ color: theme.colors.primary }} />}
@@ -72,7 +72,7 @@ function TableCustom<T extends Record<string, any>>({
           <Button
             disabled={disableEditCondition && disableEditCondition(record)}
             style={{
-              width: '33px',
+              width: "33px",
             }}
             // onClick={() => OtherUtil.loadCallback(onEdit, value)}
             icon={<EditOutlined style={{ color: theme.colors.primary }} />}
@@ -86,17 +86,17 @@ function TableCustom<T extends Record<string, any>>({
     const outSideTableHeight =
       theme.adminHeaderHeight + 12 + 16 * 3 + 32 * 2 + 62 + 16;
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setTableHeight(window.innerHeight - outSideTableHeight);
 
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         setTableHeight(window.innerHeight - outSideTableHeight);
       });
     }
 
     return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('resize', () => {});
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", () => {});
       }
     };
   }, []);
@@ -121,17 +121,17 @@ function TableCustom<T extends Record<string, any>>({
         }
         scroll={{
           y: tableHeight,
-          x: scrollH == false ? '' : '100vw',
+          x: scrollH == false ? "" : "100vw",
         }}
         pagination={pagination}
         style={{
-          border: '1px solid #eee',
+          border: "1px solid #eee",
           borderRadius: 6,
         }}
         locale={{
           emptyText: (
             <Empty
-              description={emptyDescription ?? 'No data found'}
+              description={emptyDescription ?? "No data found"}
               image={Empty.PRESENTED_IMAGE_SIMPLE}
             />
           ),
@@ -143,4 +143,3 @@ function TableCustom<T extends Record<string, any>>({
 }
 
 export default TableCustom;
-

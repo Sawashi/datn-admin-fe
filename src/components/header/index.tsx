@@ -1,19 +1,13 @@
-import { DownOutlined } from "@ant-design/icons";
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
-import { useGetIdentity, useGetLocale } from "@refinedev/core";
+import { useGetIdentity } from "@refinedev/core";
 import {
   Layout as AntdLayout,
   Avatar,
-  Button,
-  Dropdown,
-  MenuProps,
   Space,
   Switch,
   Typography,
   theme,
 } from "antd";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import { ColorModeContext } from "../../contexts";
 
@@ -34,26 +28,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const { token } = useToken();
   const { mode, setMode } = useContext(ColorModeContext);
 
-  const locale = useGetLocale();
-  const { locales } = useRouter();
-  const currentLocale = locale();
-
-  const menuItems: MenuProps["items"] = [...(locales || [])]
-    .sort()
-    .map((lang: string) => ({
-      key: lang,
-      icon: (
-        <span style={{ marginRight: 8 }}>
-          <Avatar size={16} src={`/images/flags/${lang}.svg`} />
-        </span>
-      ),
-      label: (
-        <Link href="/" locale={lang}>
-          {lang === "en" ? "English" : "German"}
-        </Link>
-      ),
-    }));
-
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
     display: "flex",
@@ -73,8 +47,8 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     <AntdLayout.Header style={headerStyles}>
       <Space>
         <Switch
-          checkedChildren="🌛"
-          unCheckedChildren="🔆"
+          checkedChildren="🔆"
+          unCheckedChildren="🌛"
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
           defaultChecked={mode === "dark"}
         />
