@@ -1,6 +1,3 @@
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { authProvider } from "src/authProvider";
 import { Button, Image, Layout, Table, TableProps, Typography } from "antd";
 import { useState } from "react";
 import UploadModal from "@components/modals/imageUploader";
@@ -148,21 +145,3 @@ export default function categorieList() {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const { authenticated, redirectTo } = await authProvider.check(context);
-
-  if (!authenticated) {
-    return {
-      props: {},
-      redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/categories")}`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

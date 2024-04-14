@@ -1,7 +1,4 @@
 import { Button, Image, Table, TableProps, Typography } from "antd";
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { authProvider } from "src/authProvider";
 import Link from "next/link";
 
 const { Title } = Typography;
@@ -165,21 +162,3 @@ export default function RecipesList() {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const { authenticated, redirectTo } = await authProvider.check(context);
-
-  if (!authenticated) {
-    return {
-      props: {},
-      redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/recipes")}`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

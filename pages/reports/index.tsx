@@ -7,9 +7,7 @@ import {
   Typography,
   Image,
 } from "antd";
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { authProvider } from "src/authProvider";
+
 const { Title } = Typography;
 interface DataTypeUser {
   key: string;
@@ -271,21 +269,3 @@ export default function ReportList() {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const { authenticated, redirectTo } = await authProvider.check(context);
-
-  if (!authenticated) {
-    return {
-      props: {},
-      redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/reports")}`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

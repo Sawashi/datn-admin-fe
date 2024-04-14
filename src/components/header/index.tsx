@@ -23,13 +23,11 @@ type IUser = {
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky,
 }) => {
-  const { data: user } = useGetIdentity<IUser>();
-
   const { token } = useToken();
   const { mode, setMode } = useContext(ColorModeContext);
 
   const headerStyles: React.CSSProperties = {
-    backgroundColor: token.colorBgElevated,
+    backgroundColor: "#ffffff",
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
@@ -52,12 +50,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
           defaultChecked={mode === "dark"}
         />
-        {(user?.name || user?.avatar) && (
-          <Space style={{ marginLeft: "8px" }} size="middle">
-            {user?.name && <Text strong>{user.name}</Text>}
-            {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
-          </Space>
-        )}
       </Space>
     </AntdLayout.Header>
   );
