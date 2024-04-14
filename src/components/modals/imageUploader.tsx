@@ -23,7 +23,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ visible, onCancel }) => {
     if (img !== null) {
       const imgRef: StorageReference = ref(imageDb, `files/${uuidv4()}`);
       uploadBytes(imgRef, img).then((value) => {
-        console.log(value);
         getDownloadURL(value.ref).then((url) => {
           setImgUrl((data) => [...data, url]);
         });
@@ -32,9 +31,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ visible, onCancel }) => {
   };
 
   useEffect(() => {
-    console.log(firebaseConfig);
     listAll(ref(imageDb, "files")).then((imgs) => {
-      console.log(imgs);
       imgs.items.forEach((val) => {
         getDownloadURL(val).then((url) => {
           setImgUrl((data) => [...data, url]);
