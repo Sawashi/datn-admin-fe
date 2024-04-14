@@ -1,30 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Upload, Button, Image } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { useS3Uploader } from "src/apis/image";
-
+import {
+  StorageReference,
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { firebaseConfig, imageDb } from "src/apis/Config";
 interface UploadModalProps {
   visible: boolean;
   onCancel: () => void;
 }
 
 const UploadModal: React.FC<UploadModalProps> = ({ visible, onCancel }) => {
-  const [file, setFile] = useState<any>(null);
-  const { uploadToS3, imageUrl, error } = useS3Uploader();
+  const [img, setImg] = useState<File | null>(null);
+  const [imgUrl, setImgUrl] = useState<string[]>([]);
 
-  const handleUpload = () => {
-    // Handle uploading logic here, you can access the file using file
-    console.log("Uploading file:", file);
-    const result = uploadToS3(file);
-    console.log("Result: " + result);
-    // Clear file after uploading
-    setFile(null);
-    onCancel();
+  const handleClick = () => {
+    if (img !== null) {
+      const imgRef: StorageReference = ref(imageDb, `files/${uuidv4()}`);
+      uploadBytes(imgRef, img).then((value) => {
+        console.log(value);
+        getDownloadURL(value.ref).then((url) => {
+          setImgUrl((data) => [...data, url]);
+        });
+      });
+    }
   };
+
+  useEffect(() => {
+    console.log(firebaseConfig);
+    listAll(ref(imageDb, "files")).then((imgs) => {
+      console.log(imgs);
+      imgs.items.forEach((val) => {
+        getDownloadURL(val).then((url) => {
+          setImgUrl((data) => [...data, url]);
+        });
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(imgUrl);
+  }, [imgUrl]);
 
   const handleRemove = () => {
     // Clear the selected file
-    setFile(null);
+    setImg(null);
   };
 
   return (
@@ -39,17 +64,17 @@ const UploadModal: React.FC<UploadModalProps> = ({ visible, onCancel }) => {
         <Button
           key="upload"
           type="primary"
-          onClick={handleUpload}
-          disabled={!file}
+          onClick={handleClick}
+          disabled={!img}
         >
           Upload
         </Button>,
       ]}
     >
-      {file ? (
+      {img ? (
         <div>
           <Image
-            src={URL.createObjectURL(file)}
+            src={URL.createObjectURL(img)}
             alt="Uploaded Image"
             style={{ maxWidth: "100%", maxHeight: "200px" }}
           />
@@ -62,7 +87,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ visible, onCancel }) => {
           fileList={[]}
           beforeUpload={(newFile) => {
             // Allow only one file to be uploaded
-            setFile(newFile);
+            setImg(newFile);
             return false;
           }}
         >
