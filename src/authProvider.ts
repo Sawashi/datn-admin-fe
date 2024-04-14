@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 export const authProvider: AuthBindings = {
-  login: async ({ email, password }) => {
+  login: async ({ email, password }: { email: string; password: string }) => {
     const { data, status } = await strapiAuthHelper.login(email, password);
     if (status === 200) {
       nookies.set(null, TOKEN_KEY, data.jwt, {
@@ -49,7 +49,7 @@ export const authProvider: AuthBindings = {
       redirectTo: "/login",
     };
   },
-  check: async (ctx) => {
+  check: async (ctx: any) => {
     const cookies = nookies.get(ctx);
     if (cookies[TOKEN_KEY]) {
       axiosInstance.defaults.headers.common = {
@@ -84,7 +84,7 @@ export const authProvider: AuthBindings = {
 
     return null;
   },
-  onError: async (error) => {
+  onError: async (error: any) => {
     console.error(error);
     return { error };
   },

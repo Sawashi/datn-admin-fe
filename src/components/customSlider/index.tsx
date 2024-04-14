@@ -10,13 +10,6 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
-import { TitleProps } from "@refinedev/core/dist/interfaces";
-import {
-  useActiveAuthProvider,
-  useLogout,
-  useTranslate,
-  useWarnAboutChange,
-} from "@refinedev/core";
 
 const { Sider } = Layout;
 
@@ -34,29 +27,6 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
 
   const handleMenuSelect = ({ key }: { key: string }) => {
     props.setSelectedKey(key);
-  };
-  const translate = useTranslate();
-  const { warnWhen, setWarnWhen } = useWarnAboutChange();
-  const authProvider = useActiveAuthProvider();
-  const { mutate: mutateLogout } = useLogout({
-    v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
-  });
-  const handleLogout = () => {
-    if (warnWhen) {
-      const confirm = window.confirm(
-        translate(
-          "warnWhenUnsavedChanges",
-          "Are you sure you want to leave? You have unsaved changes."
-        )
-      );
-
-      if (confirm) {
-        setWarnWhen(false);
-        mutateLogout();
-      }
-    } else {
-      mutateLogout();
-    }
   };
 
   return (
@@ -106,7 +76,7 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
       <Button
         type="primary"
         danger
-        onClick={handleLogout}
+        onClick={() => {}}
         style={{ margin: "16px", width: "83%" }}
       >
         Logout

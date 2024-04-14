@@ -1,16 +1,7 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-import {
-  Button,
-  Table,
-  TableProps,
-  Tabs,
-  TabsProps,
-  Tag,
-  Typography,
-} from "antd";
+import { Button, Table, TableProps, Typography } from "antd";
 const { Title } = Typography;
 interface DataType {
   key: string;
@@ -102,15 +93,9 @@ export default function reviewList() {
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
-  ]);
-
   if (!authenticated) {
     return {
-      props: {
-        ...translateProps,
-      },
+      props: {},
       redirect: {
         destination: `${redirectTo}?to=${encodeURIComponent("/reviews")}`,
         permanent: false,
@@ -119,8 +104,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   }
 
   return {
-    props: {
-      ...translateProps,
-    },
+    props: {},
   };
 };

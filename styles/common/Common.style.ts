@@ -1,14 +1,14 @@
-import { Button } from 'antd';
-import { theme } from 'constants/common';
-import { styled } from 'styled-components';
+import { Button } from "antd";
+import { theme } from "constants/common";
+import { styled } from "styled-components";
 
 export const ActionButton = styled.div<{
   $justifyContent?: string;
   $gap?: string;
 }>`
   display: flex;
-  gap: ${(props) => props.$gap || '10px'};
-  justify-content: ${(props) => props.$justifyContent || 'center'};
+  gap: ${(props) => props.$gap || "10px"};
+  justify-content: ${(props) => props.$justifyContent || "center"};
 `;
 
 export const DeleteButton = styled(Button)`
@@ -71,3 +71,35 @@ export const Container = styled.div`
   margin: 0 auto;
 `;
 
+export const headerStyle: React.CSSProperties = {
+  textAlign: "center",
+  color: "#fff",
+  height: 64,
+  paddingInline: 48,
+  lineHeight: "64px",
+};
+
+export const contentStyle: React.CSSProperties = {
+  textAlign: "center",
+  minHeight: 120,
+  lineHeight: "120px",
+  color: "#fff",
+};
+
+export const siderStyle: React.CSSProperties = {
+  textAlign: "center",
+  lineHeight: "120px",
+  color: "#fff",
+};
+
+export const footerStyle: React.CSSProperties = {
+  textAlign: "center",
+  color: "#fff",
+};
+
+export const layoutStyle = {
+  borderRadius: 8,
+  overflow: "hidden",
+  width: "calc(50% - 8px)",
+  maxWidth: "calc(50% - 8px)",
+};

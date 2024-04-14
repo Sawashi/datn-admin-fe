@@ -1,19 +1,9 @@
-import { AntdListInferencer } from "@refinedev/inferencer/antd";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-import {
-  Button,
-  Card,
-  Image,
-  Layout,
-  Table,
-  TableProps,
-  Typography,
-  Flex,
-  Col,
-  Row,
-} from "antd";
+import { Button, Image, Layout, Table, TableProps, Typography } from "antd";
+import { useState } from "react";
+import UploadModal from "@components/modals/imageUploader";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -132,15 +122,29 @@ const data: DataType[] = [
   },
 ];
 export default function categorieList() {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleModalOpen = () => {
+    setModalVisible(true);
+  };
+
+  const handleModalCancel = () => {
+    setModalVisible(false);
+  };
   return (
     <>
       <Title level={2}>Manage categories</Title>
       <div style={{ marginBottom: "16px", textAlign: "right" }}>
-        <Button type="primary" style={{ margin: "8px 0" }}>
+        <Button
+          type="primary"
+          style={{ margin: "8px 0" }}
+          onClick={handleModalOpen}
+        >
           Create a new categorie
         </Button>
       </div>
       <Table columns={columnsNew} dataSource={data} bordered={true} />
+      <UploadModal visible={modalVisible} onCancel={handleModalCancel} />
     </>
   );
 }
@@ -148,15 +152,9 @@ export default function categorieList() {
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
 
-  const translateProps = await serverSideTranslations(context.locale ?? "en", [
-    "common",
-  ]);
-
   if (!authenticated) {
     return {
-      props: {
-        ...translateProps,
-      },
+      props: {},
       redirect: {
         destination: `${redirectTo}?to=${encodeURIComponent("/categories")}`,
         permanent: false,
@@ -165,8 +163,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   }
 
   return {
-    props: {
-      ...translateProps,
-    },
+    props: {},
   };
 };
