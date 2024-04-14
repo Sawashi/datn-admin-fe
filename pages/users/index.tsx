@@ -65,7 +65,6 @@ export default function UserList() {
     const fetchAllUser = async () => {
       try {
         const rawData = await getAllUserData();
-        console.log("Raw data: ", rawData); // Fix: Log the raw data to see the structure
         setData(rawData); // Fix: Pass an array of users to setData
       } catch (error) {
         console.log("Something went wrong when get user data");
