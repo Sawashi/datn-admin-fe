@@ -1,6 +1,8 @@
 import { Button, Card, Image, Typography, Col, Row } from "antd";
 import TableCustom from "components/TableCustom";
 import { ColumnsType } from "antd/es/table";
+import { useState } from "react";
+import CuisineCreateModel from "@components/modals/cuisineCreateModal";
 
 const { Title } = Typography;
 
@@ -23,6 +25,15 @@ async function getData() {
   }
 }
 export default function CuisineList({ data }: { data: any }) {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleModalOpen = () => {
+    setModalVisible(true);
+  };
+
+  const handleModalCancel = () => {
+    setModalVisible(false);
+  };
   const columns: ColumnsType<DataType> = [
     {
       title: "Image",
@@ -56,7 +67,13 @@ export default function CuisineList({ data }: { data: any }) {
     <>
       <Title level={2}>Manage Cuisines</Title>
       <div style={{ marginBottom: "16px", textAlign: "right" }}>
-        <Button type="primary" style={{ margin: "8px 0" }}>
+        <Button
+          type="primary"
+          style={{ margin: "8px 0" }}
+          onClick={() => {
+            handleModalOpen();
+          }}
+        >
           Create a new cuisine
         </Button>
       </div>
@@ -116,6 +133,7 @@ export default function CuisineList({ data }: { data: any }) {
           onEdit={(value) => {}}
         />
       </Card>
+      <CuisineCreateModel visible={modalVisible} onCancel={handleModalCancel} />
     </>
   );
 }
