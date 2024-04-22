@@ -1,64 +1,29 @@
-import { RefineThemes } from "@refinedev/antd";
-import { ConfigProvider, theme } from "antd";
-import { parseCookies } from "nookies";
-import React, {
-  PropsWithChildren,
-  createContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
+
+type ColorMode = "light" | "dark";
 
 type ColorModeContextType = {
-  mode: string;
-  setMode: (mode: string) => void;
+  mode: ColorMode;
+  toggleMode: () => void;
 };
 
-export const ColorModeContext = createContext<ColorModeContextType>(
-  {} as ColorModeContextType
-);
+export const ColorModeContext = createContext<ColorModeContextType>({
+  mode: "light",
+  toggleMode: () => {},
+});
 
-export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
+export const ColorModeContextProvider: React.FC<PropsWithChildren<{}>> = ({
   children,
 }) => {
-  const [isMounted, setIsMounted] = useState(false);
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState<ColorMode>("light");
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (isMounted) {
-      setMode(parseCookies()["theme"]);
-    }
-  }, [isMounted]);
-
-  const setColorMode = () => {
-    if (mode === "light") {
-      setMode("dark");
-    } else {
-      setMode("light");
-    }
+  const toggleMode = () => {
+    setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
 
-  const { darkAlgorithm, defaultAlgorithm } = theme;
-
   return (
-    <ColorModeContext.Provider
-      value={{
-        setMode: setColorMode,
-        mode,
-      }}
-    >
-      <ConfigProvider
-        // you can change the theme colors here. example: ...RefineThemes.Magenta,
-        theme={{
-          ...RefineThemes.Blue,
-          algorithm: mode === "light" ? darkAlgorithm : defaultAlgorithm,
-        }}
-      >
-        {children}
-      </ConfigProvider>
+    <ColorModeContext.Provider value={{ mode, toggleMode }}>
+      {children}
     </ColorModeContext.Provider>
   );
 };

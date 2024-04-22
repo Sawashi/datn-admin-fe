@@ -7,50 +7,31 @@ import {
   Switch,
   Typography,
   theme,
+  Row,
+  Col,
 } from "antd";
 import React, { useContext } from "react";
 import { ColorModeContext } from "../../contexts";
 
-const { Text } = Typography;
-const { useToken } = theme;
-
-type IUser = {
-  id: number;
-  name: string;
-  avatar: string;
-};
-
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky,
 }) => {
-  const { token } = useToken();
-  const { mode, setMode } = useContext(ColorModeContext);
-
-  const headerStyles: React.CSSProperties = {
-    backgroundColor: "#ffffff",
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    padding: "0px 24px",
-    height: "64px",
-  };
-
-  if (sticky) {
-    headerStyles.position = "sticky";
-    headerStyles.top = 0;
-    headerStyles.zIndex = 1;
-  }
+  const { mode, toggleMode } = useContext(ColorModeContext);
 
   return (
-    <AntdLayout.Header style={headerStyles}>
-      <Space>
-        <Switch
-          checkedChildren="🔆"
-          unCheckedChildren="🌛"
-          onChange={() => setMode(mode === "light" ? "dark" : "light")}
-          defaultChecked={mode === "dark"}
-        />
-      </Space>
+    <AntdLayout.Header>
+      <Row justify="end">
+        <Col>
+          <Space>
+            <Switch
+              checkedChildren="🔆"
+              unCheckedChildren="🌛"
+              checked={mode === "light"}
+              onChange={toggleMode}
+            />
+          </Space>
+        </Col>
+      </Row>
     </AntdLayout.Header>
   );
 };

@@ -23,7 +23,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
-  const { mode, setMode } = useContext(ColorModeContext);
+  const { mode } = useContext(ColorModeContext);
   const router = useRouter();
   const { pathname } = router;
   const pathSegments = pathname.split("/");
@@ -39,29 +39,25 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Determine background color based on mode
-  const backgroundColor = mode === "dark" ? "#e3e3e3" : "black";
+  const backgroundColor = mode === "dark" ? "black" : "white";
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
+      <CustomSlider
+        selectedKey={selectedKey}
+        setSelectedKey={setSelectedKeyHandler}
+      />
+
       <Layout>
-        <Layout>
-          <CustomSlider
-            selectedKey={selectedKey}
-            setSelectedKey={setSelectedKeyHandler}
-          />
-
-          <Layout.Content
-            style={{
-              padding: "20px",
-              backgroundColor: backgroundColor,
-              minHeight: 280,
-            }}
-          >
-            <Header />
-
-            {children}
-          </Layout.Content>
-        </Layout>
+        <Layout.Content
+          style={{
+            padding: "20px",
+            backgroundColor: backgroundColor,
+            minHeight: 280,
+          }}
+        >
+          {children}
+        </Layout.Content>
       </Layout>
     </Layout>
   );
@@ -80,64 +76,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     );
   };
 
-  const { t, i18n } = useTranslation();
-
-  const i18nProvider = {
-    translate: (key: string, params: object) => t(key, params),
-    changeLocale: (lang: string) => i18n.changeLanguage(lang),
-    getLocale: () => i18n.language,
-  };
-
   return (
     <ColorModeContextProvider>
       <Refine
         routerProvider={routerProvider}
         authProvider={authProvider}
         dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
-        resources={[
-          {
-            name: "home",
-            list: "/home",
-            meta: {
-              canDelete: true,
-            },
-          },
-          {
-            name: "users",
-            list: "/users",
-            meta: {
-              canDelete: true,
-            },
-          },
-          {
-            name: "recipes",
-            list: "/recipes",
-            meta: {
-              canDelete: true,
-            },
-          },
-          {
-            name: "categories",
-            list: "/categories",
-            meta: {
-              canDelete: true,
-            },
-          },
-          {
-            name: "cuisines",
-            list: "/cuisines",
-            meta: {
-              canDelete: true,
-            },
-          },
-          {
-            name: "reports",
-            list: "/reports",
-            meta: {
-              canDelete: true,
-            },
-          },
-        ]}
+        resources={[]}
       >
         {renderComponent()}
       </Refine>
