@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Image, Layout, Menu } from "antd";
+import { Button, Image, Layout, Menu, Avatar } from "antd";
 import {
   HomeOutlined,
   UserOutlined,
@@ -30,7 +30,7 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
   };
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} {...props}>
+    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div
         style={{
           display: "flex",
@@ -45,6 +45,15 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
           src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"
         />
       </div>
+      <Avatar
+        size={40}
+        style={{
+          backgroundColor: "#87d068",
+          margin: "10px auto",
+          display: "block",
+        }}
+        icon={<UserOutlined />}
+      />
       <Menu
         theme="dark"
         selectedKeys={[props.selectedKey]}
