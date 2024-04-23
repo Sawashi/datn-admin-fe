@@ -25,3 +25,23 @@ export async function createCuisine(cuisineData: Cuisine): Promise<void> {
     throw error;
   }
 }
+
+export async function getAllCuisineData(): Promise<Cuisine[]> {
+  try {
+    const response = await fetch(`${apiUrl}/cuisines`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error getting data:", error);
+    throw error;
+  }
+}

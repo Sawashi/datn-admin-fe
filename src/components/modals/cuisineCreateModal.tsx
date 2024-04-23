@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Upload, Button, Input } from "antd";
+import { Modal, Upload, Button, Input, notification } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import {
   StorageReference,
@@ -34,12 +34,19 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
     };
 
     try {
-      const response = await createCuisine(cuisineData);
-      console.log(response);
+      await createCuisine(cuisineData);
       console.log("Cuisine created successfully");
-      // Optionally, you can reset the form fields or close the modal here
+      notification.success({
+        message: "Cuisine Created",
+        description: "The cuisine has been successfully created.",
+      });
+      onCancel(); // Close the modal upon successful creation
     } catch (error) {
       console.error("Error creating cuisine:", error);
+      notification.error({
+        message: "Error",
+        description: "Failed to create cuisine. Please try again later.",
+      });
     }
   };
 
@@ -62,7 +69,7 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
 
   return (
     <Modal
-      open={visible}
+      visible={visible} // Changed from open to visible
       title="Create Cuisine"
       onCancel={onCancel}
       footer={[
@@ -91,15 +98,6 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
         onChange={(e) => setDescription(e.target.value)}
         style={{ marginBottom: "10px" }}
       />
-      {imgUrl.length > 0 && (
-        <div style={{ marginBottom: "10px" }}>
-          <Image
-            src={imgUrl[0]}
-            alt="Uploaded Image"
-            style={{ maxWidth: "100%", maxHeight: "200px" }}
-          />
-        </div>
-      )}
       {img ? (
         <div>
           <Image

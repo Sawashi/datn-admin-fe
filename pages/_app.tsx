@@ -12,7 +12,7 @@ import "@refinedev/antd/dist/reset.css";
 import { authProvider, axiosInstance } from "src/authProvider";
 import { API_URL } from "src/constants";
 import { NextPage } from "next";
-import { Layout } from "antd";
+import { BackTop, Layout } from "antd";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -57,6 +57,7 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
           }}
         >
           {children}
+          <BackTop />
         </Layout.Content>
       </Layout>
     </Layout>

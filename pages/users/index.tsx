@@ -1,4 +1,4 @@
-import { Button, Table, TableProps, Tag } from "antd";
+import { Button, Table, TableProps, Tag, Spin } from "antd";
 import { Typography } from "antd";
 import { getAllUserData, User } from "src/apis/users";
 import { useEffect, useState } from "react";
@@ -59,6 +59,8 @@ const columns: TableProps<User>["columns"] = [
 
 export default function UserList() {
   const [data, setData] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // State to track loading status
+
   useEffect(() => {
     const fetchAllUser = async () => {
       try {
@@ -66,14 +68,19 @@ export default function UserList() {
         setData(rawData); // Fix: Pass an array of users to setData
       } catch (error) {
         console.log("Something went wrong when get user data");
+      } finally {
+        setLoading(false); // Set loading to false when data fetching is done
       }
     };
     fetchAllUser();
   }, []);
+
   return (
     <>
       <Title level={2}>Manage user</Title>
-      {data.length > 0 ? (
+      {loading ? ( // Render spinner while loading
+        <Spin size="large" />
+      ) : data.length > 0 ? (
         <TableCustom
           columns={columns || []} // Fix: Add default value for columns
           data={data}
