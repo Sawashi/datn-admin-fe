@@ -8,6 +8,7 @@ export interface User {
 }
 
 export async function getAllUserData(): Promise<User[]> {
+  console.log("Api url: ", apiUrl);
   try {
     const response = await fetch(`${apiUrl}/users`, {
       method: "GET",
