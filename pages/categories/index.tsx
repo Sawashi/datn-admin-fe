@@ -1,78 +1,26 @@
-import { Button, Image, Layout, Table, TableProps, Typography } from "antd";
-import { useState } from "react";
-import UploadModal from "@components/modals/imageUploader";
+import { Button, Image, Spin, Table, Typography } from "antd";
+import { useEffect, useState } from "react";
+import CuisineCreateModel from "@components/modals/cuisineCreateModal";
+import { Category, getAllCategoryData } from "src/apis/categories";
+import CategoryCreateModel from "@components/modals/categoryCreateModal";
 
-const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
-const headerStyle: React.CSSProperties = {
-  textAlign: "center",
-  color: "#fff",
-  height: 64,
-  paddingInline: 48,
-  lineHeight: "64px",
-  backgroundColor: "#4096ff",
-};
 
-const contentStyle: React.CSSProperties = {
-  textAlign: "center",
-  minHeight: 120,
-  lineHeight: "120px",
-  color: "#fff",
-  backgroundColor: "#0958d9",
-};
-
-const siderStyle: React.CSSProperties = {
-  textAlign: "center",
-  lineHeight: "120px",
-  color: "#fff",
-  backgroundColor: "#1677ff",
-};
-
-const footerStyle: React.CSSProperties = {
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#4096ff",
-};
-
-const layoutStyle = {
-  borderRadius: 8,
-  overflow: "hidden",
-};
-
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string;
-  ingredents: string;
-  image: string;
-}
-const columnsNew: TableProps<DataType>["columns"] = [
+const columnsNew = [
   {
     title: "Image",
-    key: "image",
-    dataIndex: "image",
-    render: (image) => <Image src={image} width={100} />,
+    key: "imgUrl",
+    dataIndex: "imgUrl",
+    render: (image: string) => <Image src={image} width={100} />,
   },
   {
     title: "Name",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Date",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags) => (
-      <>
-        <text>{tags}</text>
-      </>
-    ),
+    dataIndex: "name",
+    key: "name",
   },
   {
     title: "Action",
-    dataIndex: "address", // Change to "address" to check admin status
+    dataIndex: "address",
     key: "address",
     render: () => {
       return (
@@ -86,41 +34,24 @@ const columnsNew: TableProps<DataType>["columns"] = [
     },
   },
 ];
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "Category A",
-    tags: "01/01/2024",
-    ingredents: "A, B, C",
-    image:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "Category B",
-    tags: "02/01/2024",
-    ingredents: "A, B, C",
-    image:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Category C",
-    tags: "03/01/2024",
-    ingredents: "A, B, C",
-    image:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  },
-];
-export default function categorieList() {
-  const [modalVisible, setModalVisible] = useState(false);
 
+export default function categorieList() {
+  const [data, setData] = useState<Category[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const fetchAllCategories = async () => {
+    try {
+      const rawData = await getAllCategoryData();
+      setData(rawData); // Fix: Pass an array of users to setData
+    } catch (error) {
+      console.log("Something went wrong when get user data");
+    } finally {
+      setLoading(false); // Set loading to false when data fetching is done
+    }
+  };
+  useEffect(() => {
+    fetchAllCategories();
+  }, []);
   const handleModalOpen = () => {
     setModalVisible(true);
   };
@@ -140,8 +71,16 @@ export default function categorieList() {
           Create a new categorie
         </Button>
       </div>
-      <Table columns={columnsNew} dataSource={data} bordered={true} />
-      <UploadModal visible={modalVisible} onCancel={handleModalCancel} />
+      {loading ? (
+        <Spin size="large" />
+      ) : (
+        <Table columns={columnsNew} dataSource={data} bordered={true} />
+      )}
+      <CategoryCreateModel
+        visible={modalVisible}
+        onCancel={handleModalCancel}
+        fetchData={fetchAllCategories}
+      />
     </>
   );
 }
