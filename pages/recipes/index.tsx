@@ -155,7 +155,7 @@ export default function RecipesList() {
       <Title level={4}>List of recipes</Title>
       <div style={{ marginBottom: "16px", textAlign: "right" }}>
         <Button type="primary" style={{ margin: "8px 0" }}>
-          Create new post
+          Create recipes
         </Button>
       </div>
       <Table columns={columns} dataSource={data} />
