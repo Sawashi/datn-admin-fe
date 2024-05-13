@@ -1,40 +1,25 @@
-import { Button, Table, TableProps, Typography } from "antd";
+import { Button, Spin, Table, TableProps, Typography } from "antd";
+import { useEffect, useState } from "react";
+import { Review, getAllReviewData } from "src/apis/reviews";
 const { Title } = Typography;
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string;
-  content: string;
-}
 
-const columns: TableProps<DataType>["columns"] = [
+const columns: TableProps<Review>["columns"] = [
   {
     title: "Author",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <a>{text}</a>,
+    dataIndex: "user",
+    key: "user",
+    render: (user) => <a>{user.username}</a>,
   },
-  {
-    title: "Title",
-    dataIndex: "address",
-    key: "address",
-  },
+
   {
     title: "Content",
     dataIndex: "content",
     key: "content",
   },
   {
-    title: "Date",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags) => (
-      <>
-        <text>{tags}</text>
-      </>
-    ),
+    title: "Updated at",
+    key: "updatedAt",
+    dataIndex: "updatedAt",
   },
   {
     title: "Action",
@@ -52,37 +37,34 @@ const columns: TableProps<DataType>["columns"] = [
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "Dish A",
-    tags: "01/01/2024",
-    content: "This is a review",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "Dish B",
-    tags: "02/01/2024",
-    content: "This is a review",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Dish C",
-    tags: "03/01/2024",
-    content: "This is a review",
-  },
-];
 export default function reviewList() {
+  const [data, setData] = useState<Review[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const fetchAllCuisines = async () => {
+      try {
+        const rawData = await getAllReviewData();
+        setData(rawData);
+        console.log(rawData);
+      } catch (error) {
+        console.log("Something went wrong when get user data");
+      } finally {
+        setLoading(false); // Set loading to false when data fetching is done
+      }
+    };
+    fetchAllCuisines();
+  }, []);
   return (
     <>
       <Title level={2}>Manage reviews</Title>
-      <Table columns={columns} dataSource={data} />
+
+      {loading ? ( // Render spinner while loading
+        <Spin size="large" />
+      ) : data.length > 0 ? (
+        <Table columns={columns} dataSource={data} />
+      ) : (
+        <Title>Nothing to show</Title> // Fix: Add default value for columns
+      )}
     </>
   );
 }

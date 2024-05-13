@@ -77,10 +77,10 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
         </Menu.Item>
         {/* <Menu.Item key="reports" icon={<SolutionOutlined />}>
           <Link href="/reports">Reports</Link>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="reviews" icon={<StarOutlined />}>
           <Link href="/reviews">Reviews</Link>
-        </Menu.Item> */}
+        </Menu.Item>
       </Menu>
       <Button
         type="primary"
