@@ -31,6 +31,7 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
       cuisineName,
       description,
       imgUrl: imgUrlLoad[0], // Update imgUrl based on your implementation
+      dishes: [],
     };
 
     try {
