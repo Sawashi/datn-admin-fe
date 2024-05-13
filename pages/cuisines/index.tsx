@@ -4,6 +4,7 @@ import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import CuisineCreateModel from "@components/modals/cuisineCreateModal";
 import { Cuisine, getAllCuisineData } from "src/apis/cuisines";
+import { Dish } from "src/apis/dishes";
 
 const { Title } = Typography;
 
@@ -24,7 +25,8 @@ export default function CuisineList() {
     const fetchAllCuisines = async () => {
       try {
         const rawData = await getAllCuisineData();
-        setData(rawData); // Fix: Pass an array of users to setData
+        setData(rawData);
+        console.log(rawData);
       } catch (error) {
         console.log("Something went wrong when get user data");
       } finally {
@@ -40,28 +42,23 @@ export default function CuisineList() {
   const handleModalCancel = () => {
     setModalVisible(false);
   };
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<Dish> = [
     {
       title: "Image",
-      key: "imgUrl",
-      dataIndex: "imgUrl",
+      key: "imageUrl",
+      dataIndex: "imageUrl",
       render: (imgUrl) => <Image src={imgUrl} width={100} />,
     },
     {
       title: "Name",
-      dataIndex: "cuisineName",
-      key: "cuisineName",
+      dataIndex: "dishName",
+      key: "dishName",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Created At",
-      key: "createdAt",
-      dataIndex: "createdAt",
+      title: "Author",
+      key: "author",
+      dataIndex: "author",
     },
     {
       title: "Updated At",
@@ -137,10 +134,10 @@ export default function CuisineList() {
                   </div>
                 </Col>
               </Row>
-              <Title level={3}>Recipes</Title>
+              <Title level={3}>Dishes</Title>
               <TableCustom
                 columns={columns}
-                data={[]}
+                data={cuisine.dishes}
                 hasEdit
                 hasDelete
                 onSelectedRow={() => {}}

@@ -66,21 +66,21 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
         <Menu.Item key="users" icon={<UserOutlined />}>
           <Link href="/users">Users</Link>
         </Menu.Item>
-        <Menu.Item key="recipes" icon={<BookOutlined />}>
+        {/* <Menu.Item key="recipes" icon={<BookOutlined />}>
           <Link href="/recipes">Recipes</Link>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="categories" icon={<AppstoreOutlined />}>
           <Link href="/categories">Categories</Link>
         </Menu.Item>
         <Menu.Item key="cuisines" icon={<EnvironmentOutlined />}>
           <Link href="/cuisines">Cuisines</Link>
         </Menu.Item>
-        <Menu.Item key="reports" icon={<SolutionOutlined />}>
+        {/* <Menu.Item key="reports" icon={<SolutionOutlined />}>
           <Link href="/reports">Reports</Link>
         </Menu.Item>
         <Menu.Item key="reviews" icon={<StarOutlined />}>
           <Link href="/reviews">Reviews</Link>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
       <Button
         type="primary"

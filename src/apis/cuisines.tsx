@@ -1,9 +1,12 @@
+import { Dish } from "./dishes";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Cuisine {
   cuisineName: string;
   description: string;
   imgUrl: string;
+  dishes: Dish[];
 }
 
 export async function createCuisine(cuisineData: Cuisine): Promise<void> {
