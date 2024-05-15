@@ -60,9 +60,9 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
         onSelect={handleMenuSelect}
         mode="inline"
       >
-        <Menu.Item key="home" icon={<HomeOutlined />}>
+        {/* <Menu.Item key="home" icon={<HomeOutlined />}>
           <Link href="/home">Home</Link>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="users" icon={<UserOutlined />}>
           <Link href="/users">Users</Link>
         </Menu.Item>

@@ -28,11 +28,9 @@ const columns: TableProps<User>["columns"] = [
     dataIndex: "status",
     render: (status) => (
       <>
-        {status === "good" ? (
-          <Tag color="green">Good</Tag>
-        ) : (
-          <Tag color="red">Banned</Tag>
-        )}
+        {status === "good" && <Tag color="green">Good</Tag>}
+        {status === "banned" && <Tag color="red">Banned</Tag>}
+        {status === null && <Tag color="gray">Unknown</Tag>}
       </>
     ),
   },
@@ -44,12 +42,25 @@ const columns: TableProps<User>["columns"] = [
       const isAdmin = role === "admin"; // Replace with your actual admin check logic
       return (
         <>
-          {isAdmin ? null : record.status === "good" ? (
+          {/* {isAdmin ? null : record.status === "good" ? (
             <Button type="primary" danger>
               Ban
             </Button>
           ) : (
             <Button type="primary">Unban</Button>
+          )} */}
+          {isAdmin ? null : (
+            <>
+              {record.status == "good" || record.status == null ? (
+                <>
+                  <Button type="primary" danger>
+                    Ban
+                  </Button>
+                </>
+              ) : (
+                <Button type="primary">Unban</Button>
+              )}
+            </>
           )}
         </>
       );
@@ -66,6 +77,7 @@ export default function UserList() {
       try {
         const rawData = await getAllUserData();
         setData(rawData); // Fix: Pass an array of users to setData
+        console.log(rawData);
       } catch (error) {
         console.log("Something went wrong when get user data");
       } finally {

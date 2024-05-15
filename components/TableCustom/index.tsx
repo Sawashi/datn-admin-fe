@@ -26,6 +26,7 @@ type P_Props<T extends Record<string, any>> = {
   onSelectedRow?: (rowKeys: React.Key[]) => void;
   onRow?: any;
   onChange?: any;
+  showEdit?: boolean;
 };
 
 function TableCustom<T extends Record<string, any>>({
@@ -44,6 +45,7 @@ function TableCustom<T extends Record<string, any>>({
   onSelectedRow,
   onRow,
   onChange = () => {},
+  showEdit,
 }: P_Props<T>) {
   const [tableHeight, setTableHeight] = useState<number>(0);
 
@@ -55,29 +57,35 @@ function TableCustom<T extends Record<string, any>>({
       fixed: "left",
       width: 65,
       render: (value: any, record: any) => {
-        if (disableReason)
+        if (showEdit) {
+          if (disableReason)
+            return (
+              <Tooltip title={disableReason}>
+                <Button
+                  disabled={
+                    disableEditCondition && disableEditCondition(record)
+                  }
+                  style={{
+                    width: "33px",
+                  }}
+                  // onClick={() => OtherUtil.loadCallback(onEdit, value)}
+                  icon={
+                    <EditOutlined style={{ color: theme.colors.primary }} />
+                  }
+                />
+              </Tooltip>
+            );
           return (
-            <Tooltip title={disableReason}>
-              <Button
-                disabled={disableEditCondition && disableEditCondition(record)}
-                style={{
-                  width: "33px",
-                }}
-                // onClick={() => OtherUtil.loadCallback(onEdit, value)}
-                icon={<EditOutlined style={{ color: theme.colors.primary }} />}
-              />
-            </Tooltip>
+            <Button
+              disabled={disableEditCondition && disableEditCondition(record)}
+              style={{
+                width: "33px",
+              }}
+              // onClick={() => OtherUtil.loadCallback(onEdit, value)}
+              icon={<EditOutlined style={{ color: theme.colors.primary }} />}
+            ></Button>
           );
-        return (
-          <Button
-            disabled={disableEditCondition && disableEditCondition(record)}
-            style={{
-              width: "33px",
-            }}
-            // onClick={() => OtherUtil.loadCallback(onEdit, value)}
-            icon={<EditOutlined style={{ color: theme.colors.primary }} />}
-          ></Button>
-        );
+        }
       },
     },
   ];
