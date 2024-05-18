@@ -1,16 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Upload, Button, Input, notification } from "antd";
+import React, { useState } from "react";
+import { Modal, Upload, Button, Input, notification, Image } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import {
-  StorageReference,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
-import { firebaseConfig, imageDb } from "src/apis/Config";
-import { Image } from "antd";
-import { Cuisine, createCuisine } from "src/apis/cuisines";
+import axios from "axios";
 
 interface CuisineCreateModelProps {
   visible: boolean;
@@ -22,20 +13,20 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
   onCancel,
 }) => {
   const [img, setImg] = useState<File | null>(null);
-  const [imgUrl, setImgUrl] = useState<string[]>([]);
   const [cuisineName, setCuisineName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  const handleCreateCuisine = async (imgUrlLoad: string[]) => {
-    const cuisineData: Cuisine = {
-      cuisineName,
-      description,
-      imgUrl: imgUrlLoad[0], // Update imgUrl based on your implementation
-      dishes: [],
-    };
-
+  const handleCreateCuisine = async (formData: FormData) => {
     try {
-      await createCuisine(cuisineData);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/cuisines`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log("Cuisine created successfully");
       notification.success({
         message: "Cuisine Created",
@@ -53,13 +44,12 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
 
   const handleUploadImg = () => {
     if (img !== null) {
-      const imgRef: StorageReference = ref(imageDb, `files/${uuidv4()}`);
-      uploadBytes(imgRef, img).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          setImgUrl([url]);
-          handleCreateCuisine([url]);
-        });
-      });
+      const formData = new FormData();
+      formData.append("cuisineName", cuisineName);
+      formData.append("description", description);
+      formData.append("image", img);
+
+      handleCreateCuisine(formData);
     }
   };
 
@@ -70,7 +60,7 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
 
   return (
     <Modal
-      visible={visible} // Changed from open to visible
+      visible={visible}
       title="Create Cuisine"
       onCancel={onCancel}
       footer={[
