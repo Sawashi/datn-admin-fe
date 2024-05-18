@@ -1,6 +1,7 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Category {
+  id: number;
   name: string;
   imgUrl: string;
 }
@@ -41,6 +42,24 @@ export async function getAllCategoryData(): Promise<Category[]> {
     return await response.json();
   } catch (error) {
     console.error("Error getting data:", error);
+    throw error;
+  }
+}
+
+export async function deleteCategory(categoryId: number): Promise<void> {
+  try {
+    const response = await fetch(`${apiUrl}/categories/${categoryId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete category");
+    }
+  } catch (error) {
+    console.error("Error deleting category:", error);
     throw error;
   }
 }
