@@ -3,6 +3,7 @@ import { Dish } from "./dishes";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Cuisine {
+  id: number;
   cuisineName: string;
   description: string;
   imgUrl: string;
@@ -45,6 +46,23 @@ export async function getAllCuisineData(): Promise<Cuisine[]> {
     return await response.json();
   } catch (error) {
     console.error("Error getting data:", error);
+    throw error;
+  }
+}
+export async function deleteCuisine(cuisineId: number): Promise<void> {
+  try {
+    const response = await fetch(`${apiUrl}/cuisines/${cuisineId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete cuisine");
+    }
+  } catch (error) {
+    console.error("Error deleting cuisine:", error);
     throw error;
   }
 }

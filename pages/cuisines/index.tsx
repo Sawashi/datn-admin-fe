@@ -1,9 +1,18 @@
-import { Button, Card, Image, Typography, Col, Row, Spin } from "antd";
+import {
+  Button,
+  Card,
+  Image,
+  Typography,
+  Col,
+  Row,
+  Spin,
+  notification,
+} from "antd";
 import TableCustom from "components/TableCustom";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import CuisineCreateModel from "@components/modals/cuisineCreateModal";
-import { Cuisine, getAllCuisineData } from "src/apis/cuisines";
+import { Cuisine, deleteCuisine, getAllCuisineData } from "src/apis/cuisines";
 import { Dish } from "src/apis/dishes";
 
 const { Title } = Typography;
@@ -35,12 +44,41 @@ export default function CuisineList() {
     };
     fetchAllCuisines();
   }, []);
+  const fetchAllCuisines = async () => {
+    try {
+      const rawData = await getAllCuisineData();
+      setData(rawData);
+      console.log(rawData);
+    } catch (error) {
+      console.log("Something went wrong when get user data");
+    } finally {
+      setLoading(false); // Set loading to false when data fetching is done
+    }
+  };
   const handleModalOpen = () => {
     setModalVisible(true);
   };
 
   const handleModalCancel = () => {
     setModalVisible(false);
+  };
+
+  const handleDeleteCuisine = async (cuisineId: number) => {
+    try {
+      await deleteCuisine(cuisineId);
+      console.log("Cuisine deleted successfully");
+      notification.success({
+        message: "Cuisine Deleted",
+        description: "The cuisine has been successfully deleted.",
+      });
+      fetchAllCuisines();
+    } catch (error) {
+      console.error("Error deleting cuisine:", error);
+      notification.error({
+        message: "Error",
+        description: "Failed to delete cuisine. Please try again later.",
+      });
+    }
   };
   const columns: ColumnsType<Dish> = [
     {
@@ -93,7 +131,11 @@ export default function CuisineList() {
               }}
             >
               <div style={{ marginBottom: "16px", textAlign: "right" }}>
-                <Button type="primary" danger>
+                <Button
+                  type="primary"
+                  danger
+                  onClick={() => handleDeleteCuisine(cuisine.id)}
+                >
                   Delete
                 </Button>
               </div>
@@ -150,7 +192,11 @@ export default function CuisineList() {
         <Title>Nothing to show</Title> // Fix: Add default value for columns
       )}
 
-      <CuisineCreateModel visible={modalVisible} onCancel={handleModalCancel} />
+      <CuisineCreateModel
+        visible={modalVisible}
+        onCancel={handleModalCancel}
+        onCreated={fetchAllCuisines}
+      />
     </>
   );
 }

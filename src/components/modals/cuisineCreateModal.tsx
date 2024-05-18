@@ -6,11 +6,13 @@ import axios from "axios";
 interface CuisineCreateModelProps {
   visible: boolean;
   onCancel: () => void;
+  onCreated: () => void;
 }
 
 const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
   visible,
   onCancel,
+  onCreated,
 }) => {
   const [img, setImg] = useState<File | null>(null);
   const [cuisineName, setCuisineName] = useState<string>("");
@@ -32,6 +34,7 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
         message: "Cuisine Created",
         description: "The cuisine has been successfully created.",
       });
+      onCreated(); // Refresh the list of cuisines
       onCancel(); // Close the modal upon successful creation
     } catch (error) {
       console.error("Error creating cuisine:", error);
