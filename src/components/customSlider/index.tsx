@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Image, Layout, Menu, Avatar } from "antd";
+import { Button, Image, Layout, Menu, Avatar, message } from "antd";
 import {
   HomeOutlined,
   UserOutlined,
@@ -10,6 +10,8 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 const { Sider } = Layout;
 
@@ -19,6 +21,7 @@ interface SliderProps {
 }
 
 const CustomSlider: React.FC<SliderProps> = (props) => {
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
 
   const onCollapse = (collapsed: boolean) => {
@@ -85,7 +88,11 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
       <Button
         type="primary"
         danger
-        onClick={() => {}}
+        onClick={() => {
+          Cookies.set("accessToken", "");
+          message.info("Logged out");
+          router.push("/login");
+        }}
         style={{ margin: "16px", width: "83%" }}
       >
         Logout
