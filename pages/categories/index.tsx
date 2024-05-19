@@ -1,32 +1,39 @@
 import { Button, Image, Spin, Table, Typography, notification } from "antd";
 import { useEffect, useState } from "react";
-import CuisineCreateModel from "@components/modals/cuisineCreateModal";
 import {
   Category,
   deleteCategory,
   getAllCategoryData,
 } from "src/apis/categories";
 import CategoryCreateModel from "@components/modals/categoryCreateModal";
+import CategoryEditModel from "@components/modals/categoryEditModal"; // Import the edit modal
 
 const { Title } = Typography;
 
-export default function categorieList() {
+export default function CategorieList() {
   const [data, setData] = useState<Category[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false); // State for edit modal
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  ); // State to store selected category for editing
   const [loading, setLoading] = useState<boolean>(true);
+
   const fetchAllCategories = async () => {
     try {
       const rawData = await getAllCategoryData();
-      setData(rawData); // Fix: Pass an array of users to setData
+      setData(rawData);
     } catch (error) {
-      console.log("Something went wrong when get user data");
+      console.log("Something went wrong when fetching category data");
     } finally {
-      setLoading(false); // Set loading to false when data fetching is done
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchAllCategories();
   }, []);
+
   const handleModalOpen = () => {
     setModalVisible(true);
   };
@@ -34,6 +41,17 @@ export default function categorieList() {
   const handleModalCancel = () => {
     setModalVisible(false);
   };
+
+  const handleEditModalOpen = (category: Category) => {
+    setSelectedCategory(category);
+    setEditModalVisible(true);
+  };
+
+  const handleEditModalCancel = () => {
+    setSelectedCategory(null);
+    setEditModalVisible(false);
+  };
+
   const handleDeleteCategory = async (categoryId: number) => {
     try {
       await deleteCategory(categoryId);
@@ -50,6 +68,7 @@ export default function categorieList() {
       });
     }
   };
+
   const columnsNew = [
     {
       title: "Image",
@@ -68,7 +87,9 @@ export default function categorieList() {
       render: (record: Category) => {
         return (
           <>
-            <Button type="primary">View</Button>{" "}
+            <Button type="primary" onClick={() => handleEditModalOpen(record)}>
+              Edit
+            </Button>{" "}
             <Button
               type="primary"
               danger
@@ -83,6 +104,7 @@ export default function categorieList() {
       },
     },
   ];
+
   return (
     <>
       <Title level={2}>Manage categories</Title>
@@ -92,7 +114,7 @@ export default function categorieList() {
           style={{ margin: "8px 0" }}
           onClick={handleModalOpen}
         >
-          Create a new categorie
+          Create a new category
         </Button>
       </div>
       {loading ? (
@@ -104,6 +126,12 @@ export default function categorieList() {
         visible={modalVisible}
         onCancel={handleModalCancel}
         fetchData={fetchAllCategories}
+      />
+      <CategoryEditModel
+        visible={editModalVisible}
+        onCancel={handleEditModalCancel}
+        category={selectedCategory}
+        onRefresh={fetchAllCategories}
       />
     </>
   );

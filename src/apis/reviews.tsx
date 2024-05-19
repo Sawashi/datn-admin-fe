@@ -1,4 +1,5 @@
 import { Dish } from "./dishes";
+import fetchWrapper from "./fetchWrapper";
 import { User } from "./users";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export interface Review {
@@ -11,7 +12,7 @@ export interface Review {
 }
 export async function getAllReviewData(): Promise<Review[]> {
   try {
-    const response = await fetch(`${apiUrl}/reviews`, {
+    const response = await fetchWrapper(`${apiUrl}/reviews`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -35,7 +35,6 @@ export default function CuisineList() {
       try {
         const rawData = await getAllCuisineData();
         setData(rawData);
-        console.log(rawData);
       } catch (error) {
         console.log("Something went wrong when get user data");
       } finally {
@@ -48,7 +47,6 @@ export default function CuisineList() {
     try {
       const rawData = await getAllCuisineData();
       setData(rawData);
-      console.log(rawData);
     } catch (error) {
       console.log("Something went wrong when get user data");
     } finally {
