@@ -1,4 +1,5 @@
 import { Dish } from "./dishes";
+import fetchWrapper from "./fetchWrapper";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,9 +12,8 @@ export interface Cuisine {
 }
 
 export async function createCuisine(cuisineData: Cuisine): Promise<void> {
-  console.log(cuisineData);
   try {
-    const response = await fetch(`${apiUrl}/cuisines`, {
+    const response = await fetchWrapper(`${apiUrl}/cuisines`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export async function createCuisine(cuisineData: Cuisine): Promise<void> {
 
 export async function getAllCuisineData(): Promise<Cuisine[]> {
   try {
-    const response = await fetch(`${apiUrl}/cuisines`, {
+    const response = await fetchWrapper(`${apiUrl}/cuisines`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export async function getAllCuisineData(): Promise<Cuisine[]> {
 }
 export async function deleteCuisine(cuisineId: number): Promise<void> {
   try {
-    const response = await fetch(`${apiUrl}/cuisines/${cuisineId}`, {
+    const response = await fetchWrapper(`${apiUrl}/cuisines/${cuisineId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

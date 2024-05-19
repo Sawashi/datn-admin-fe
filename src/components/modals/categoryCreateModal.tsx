@@ -30,7 +30,8 @@ const CategoryCreateModel: React.FC<CategoryCreateModelProps> = ({
   const handleCreateCategory = async (imgUrlLoad: string[]) => {
     const categoryData: Category = {
       name: categoryName,
-      imgUrl: imgUrlLoad[0], // Update imgUrl based on your implementation
+      imgUrl: imgUrlLoad[0],
+      id: 0,
     };
 
     try {

@@ -1,3 +1,5 @@
+import fetchWrapper from "./fetchWrapper";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export interface User {
@@ -8,9 +10,8 @@ export interface User {
 }
 
 export async function getAllUserData(): Promise<User[]> {
-  console.log("Api url: ", apiUrl);
   try {
-    const response = await fetch(`${apiUrl}/users`, {
+    const response = await fetchWrapper(`${apiUrl}/users`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -33,9 +34,9 @@ export async function changeUserStatus(
   status: boolean
 ): Promise<User[]> {
   const statusString = status ? "good" : "banned";
-  console.log("Api url: ", apiUrl);
+
   try {
-    const response = await fetch(`${apiUrl}/users/${userId}/status`, {
+    const response = await fetchWrapper(`${apiUrl}/users/${userId}/status`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

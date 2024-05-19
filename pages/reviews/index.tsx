@@ -45,7 +45,6 @@ export default function reviewList() {
       try {
         const rawData = await getAllReviewData();
         setData(rawData);
-        console.log(rawData);
       } catch (error) {
         console.log("Something went wrong when get user data");
       } finally {

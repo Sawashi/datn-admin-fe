@@ -1,3 +1,5 @@
+import fetchWrapper from "./fetchWrapper";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Category {
@@ -7,9 +9,8 @@ export interface Category {
 }
 
 export async function createCategory(categoryData: Category): Promise<void> {
-  console.log(categoryData);
   try {
-    const response = await fetch(`${apiUrl}/categories`, {
+    const response = await fetchWrapper(`${apiUrl}/categories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +29,7 @@ export async function createCategory(categoryData: Category): Promise<void> {
 
 export async function getAllCategoryData(): Promise<Category[]> {
   try {
-    const response = await fetch(`${apiUrl}/categories`, {
+    const response = await fetchWrapper(`${apiUrl}/categories`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +49,7 @@ export async function getAllCategoryData(): Promise<Category[]> {
 
 export async function deleteCategory(categoryId: number): Promise<void> {
   try {
-    const response = await fetch(`${apiUrl}/categories/${categoryId}`, {
+    const response = await fetchWrapper(`${apiUrl}/categories/${categoryId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -60,6 +61,27 @@ export async function deleteCategory(categoryId: number): Promise<void> {
     }
   } catch (error) {
     console.error("Error deleting category:", error);
+    throw error;
+  }
+}
+export async function editCategory(categoryData: Category): Promise<void> {
+  try {
+    const response = await fetchWrapper(
+      `${apiUrl}/categories/${categoryData.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(categoryData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to edit category");
+    }
+  } catch (error) {
+    console.error("Error editing category:", error);
     throw error;
   }
 }
