@@ -13,6 +13,7 @@ import { authProvider, axiosInstance } from "src/authProvider";
 import { API_URL } from "src/constants";
 import { NextPage } from "next";
 import { BackTop, Layout } from "antd";
+import AuthProvider from "@components/providers/authProviders";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -40,13 +41,16 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
 
   // Determine background color based on mode
   const backgroundColor = mode === "dark" ? "black" : "white";
-
+  // Check if current route is "/login" or "/register"
+  const hideSidebar = pathname === "/login" || pathname === "/register";
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <CustomSlider
-        selectedKey={selectedKey}
-        setSelectedKey={setSelectedKeyHandler}
-      />
+      {!hideSidebar && (
+        <CustomSlider
+          selectedKey={selectedKey}
+          setSelectedKey={setSelectedKeyHandler}
+        />
+      )}
 
       <Layout>
         <Layout.Content
@@ -71,9 +75,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     }
 
     return (
-      <CustomLayout>
-        <Component {...pageProps} />
-      </CustomLayout>
+      <AuthProvider>
+        <CustomLayout>
+          <Component {...pageProps} />
+        </CustomLayout>
+      </AuthProvider>
     );
   };
 

@@ -6,7 +6,7 @@ export default function Home() {
 
   // Navigate to /users when the component mounts
   useEffect(() => {
-    router.push("/home");
+    router.push("/login");
   }, []);
 
   // Render nothing initially because we are redirecting
