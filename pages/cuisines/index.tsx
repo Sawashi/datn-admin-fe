@@ -15,12 +15,14 @@ import CuisineCreateModel from "@components/modals/cuisineCreateModal";
 import { Cuisine, deleteCuisine, getAllCuisineData } from "src/apis/cuisines";
 import { Dish } from "src/apis/dishes";
 import EditCuisineModal from "@components/modals/cuisineEditModal";
+import DishCreateModel from "@components/modals/dishCreateModal";
 
 const { Title } = Typography;
 export default function CuisineList() {
   const [modalEditVisible, setModalEditVisible] = useState(false);
   const [selectedCuisine, setSelectedCuisine] = useState<Cuisine | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalCreateDishVisible, setModalCreateDishVisible] = useState(false);
   const [data, setData] = useState<Cuisine[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
@@ -56,6 +58,13 @@ export default function CuisineList() {
   const handleModalEditOpen = (cuisine: Cuisine) => {
     setSelectedCuisine(cuisine);
     setModalEditVisible(true);
+  };
+  const handleModalCreateDishOpen = (cuisine: Cuisine) => {
+    setSelectedCuisine(cuisine);
+    setModalCreateDishVisible(true);
+  };
+  const handleModalCreateDishCancel = () => {
+    setModalCreateDishVisible(false);
   };
 
   const handleModalEditCancel = () => {
@@ -181,6 +190,17 @@ export default function CuisineList() {
                 </Col>
               </Row>
               <Title level={3}>Dishes</Title>
+              <div style={{ marginBottom: "16px", textAlign: "right" }}>
+                <Button
+                  type="primary"
+                  style={{ margin: "8px 0" }}
+                  onClick={() => {
+                    handleModalCreateDishOpen(cuisine);
+                  }}
+                >
+                  Create new dish
+                </Button>
+              </div>
               <TableCustom
                 columns={columns}
                 data={cuisine.dishes}
@@ -199,6 +219,12 @@ export default function CuisineList() {
       <CuisineCreateModel
         visible={modalVisible}
         onCancel={handleModalCancel}
+        onCreated={fetchAllCuisines}
+      />
+      <DishCreateModel
+        visible={modalCreateDishVisible}
+        onCancel={handleModalCreateDishCancel}
+        cuisine={selectedCuisine}
         onCreated={fetchAllCuisines}
       />
       <EditCuisineModal
