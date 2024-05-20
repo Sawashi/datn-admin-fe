@@ -1,8 +1,22 @@
-import { Button, Table, TableProps, Tag, Spin, notification } from "antd";
+import {
+  Button,
+  Table,
+  TableProps,
+  Tag,
+  Spin,
+  notification,
+  message,
+} from "antd";
 import { Typography } from "antd";
-import { changeUserStatus, getAllUserData, User } from "src/apis/users";
+import {
+  changeUserRole,
+  changeUserStatus,
+  getAllUserData,
+  User,
+} from "src/apis/users";
 import { useEffect, useState } from "react";
 import TableCustom from "components/TableCustom";
+import UserRoleSwitch from "@components/customSwitch/userRoleSwitch";
 const { Title } = Typography;
 
 export default function UserList() {
@@ -23,7 +37,15 @@ export default function UserList() {
       setLoading(false); // Stop loading
     }
   };
-
+  const makeUser = async (userId: number) => {
+    try {
+      await changeUserRole(userId, "user");
+      message.success("Given user role as user");
+      await fetchAllUser();
+    } catch (error) {
+      message.error("Failed to update user role");
+    }
+  };
   useEffect(() => {
     fetchAllUser();
   }, []);
@@ -53,12 +75,40 @@ export default function UserList() {
       title: "Name",
       dataIndex: "username",
       key: "username",
-      render: (text) => <a>{text}</a>,
+      //render: (text) => <a>{text}</a>,
     },
     {
       title: "Role",
       dataIndex: "role",
       key: "role",
+      render: (role, record) => {
+        return (
+          <>
+            {/* {role === "admin" ? (
+              <Tag color="purple">Admin</Tag>
+            ) : role === "user" ? (
+              <Tag color="blue">User</Tag>
+            ) : (
+              <Tag color="gray"></Tag>
+            )} */}
+
+            {role != "admin" && role != "user" && (
+              <>
+                <Tag color="gray">unknown</Tag>
+                <Button onClick={() => makeUser(parseInt(record.id))}>
+                  Make User
+                </Button>
+              </>
+            )}
+            {role == "admin" ? (
+              <UserRoleSwitch user={record} refreshData={() => {}} />
+            ) : null}
+            {role == "user" ? (
+              <UserRoleSwitch user={record} refreshData={() => {}} />
+            ) : null}
+          </>
+        );
+      },
     },
     {
       title: "Status",
@@ -68,7 +118,7 @@ export default function UserList() {
         <>
           {status === "good" && <Tag color="green">Good</Tag>}
           {status === "banned" && <Tag color="red">Banned</Tag>}
-          {status === null && <Tag color="gray">Unknown</Tag>}
+          {status === null && <Tag color="gray"></Tag>}
         </>
       ),
     },

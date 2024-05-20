@@ -42,30 +42,46 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   // Determine background color based on mode
   const backgroundColor = mode === "dark" ? "black" : "white";
   // Check if current route is "/login" or "/register"
-  const hideSidebar = pathname === "/login" || pathname === "/register";
-  return (
-    <Layout style={{ minHeight: "100vh" }}>
-      {!hideSidebar && (
+  const shouldUseSidebar = pathname === "/login" || pathname === "/register";
+  if (shouldUseSidebar) {
+    return (
+      <Layout style={{ minHeight: "100vh" }}>
+        <Layout>
+          <Layout.Content
+            style={{
+              padding: "20px",
+              backgroundColor: backgroundColor,
+              minHeight: 280,
+            }}
+          >
+            {children}
+            <BackTop />
+          </Layout.Content>
+        </Layout>
+      </Layout>
+    );
+  } else {
+    return (
+      <Layout style={{ minHeight: "100vh" }}>
         <CustomSlider
           selectedKey={selectedKey}
           setSelectedKey={setSelectedKeyHandler}
         />
-      )}
-
-      <Layout>
-        <Layout.Content
-          style={{
-            padding: "20px",
-            backgroundColor: backgroundColor,
-            minHeight: 280,
-          }}
-        >
-          {children}
-          <BackTop />
-        </Layout.Content>
+        <Layout>
+          <Layout.Content
+            style={{
+              padding: "20px",
+              backgroundColor: backgroundColor,
+              minHeight: 280,
+            }}
+          >
+            {children}
+            <BackTop />
+          </Layout.Content>
+        </Layout>
       </Layout>
-    </Layout>
-  );
+    );
+  }
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
