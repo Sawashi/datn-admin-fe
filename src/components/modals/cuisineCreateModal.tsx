@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Upload, Button, Input, notification, Image } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 interface CuisineCreateModelProps {
   visible: boolean;
@@ -17,7 +18,7 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
   const [img, setImg] = useState<File | null>(null);
   const [cuisineName, setCuisineName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-
+  const token = Cookies.get("accessToken");
   const handleCreateCuisine = async (formData: FormData) => {
     try {
       await axios.post(
@@ -25,6 +26,7 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
         formData,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }

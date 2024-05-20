@@ -66,3 +66,25 @@ export async function deleteCuisine(cuisineId: number): Promise<void> {
     throw error;
   }
 }
+
+export async function editCuisine(cuisineData: Cuisine): Promise<void> {
+  try {
+    const response = await fetchWrapper(
+      `${apiUrl}/cuisines/${cuisineData.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cuisineData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to edit cuisine");
+    }
+  } catch (error) {
+    console.error("Error editing cuisine:", error);
+    throw error;
+  }
+}

@@ -9,7 +9,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 const fetchWrapper = async (url: string, options: RequestInit = {}) => {
   const token = Cookies.get("accessToken"); // Assuming token is stored in localStorage
-  console.log("token got: ", token);
   const headers: Headers = {
     ...(options.headers as Headers),
   };

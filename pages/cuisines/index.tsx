@@ -14,19 +14,12 @@ import { useEffect, useState } from "react";
 import CuisineCreateModel from "@components/modals/cuisineCreateModal";
 import { Cuisine, deleteCuisine, getAllCuisineData } from "src/apis/cuisines";
 import { Dish } from "src/apis/dishes";
+import EditCuisineModal from "@components/modals/cuisineEditModal";
 
 const { Title } = Typography;
-
-export interface DataType {
-  id: string;
-  imgUrl: string;
-  cuisineName: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export default function CuisineList() {
+  const [modalEditVisible, setModalEditVisible] = useState(false);
+  const [selectedCuisine, setSelectedCuisine] = useState<Cuisine | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState<Cuisine[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,11 +53,17 @@ export default function CuisineList() {
   const handleModalCancel = () => {
     setModalVisible(false);
   };
+  const handleModalEditOpen = (cuisine: Cuisine) => {
+    setSelectedCuisine(cuisine);
+    setModalEditVisible(true);
+  };
 
+  const handleModalEditCancel = () => {
+    setModalEditVisible(false);
+  };
   const handleDeleteCuisine = async (cuisineId: number) => {
     try {
       await deleteCuisine(cuisineId);
-      console.log("Cuisine deleted successfully");
       notification.success({
         message: "Cuisine Deleted",
         description: "The cuisine has been successfully deleted.",
@@ -131,6 +130,13 @@ export default function CuisineList() {
               <div style={{ marginBottom: "16px", textAlign: "right" }}>
                 <Button
                   type="primary"
+                  onClick={() => handleModalEditOpen(cuisine)}
+                >
+                  Edit
+                </Button>
+                <text> </text>
+                <Button
+                  type="primary"
                   danger
                   onClick={() => handleDeleteCuisine(cuisine.id)}
                 >
@@ -194,6 +200,12 @@ export default function CuisineList() {
         visible={modalVisible}
         onCancel={handleModalCancel}
         onCreated={fetchAllCuisines}
+      />
+      <EditCuisineModal
+        visible={modalEditVisible}
+        onCancel={handleModalEditCancel}
+        cuisine={selectedCuisine}
+        onRefresh={fetchAllCuisines}
       />
     </>
   );
