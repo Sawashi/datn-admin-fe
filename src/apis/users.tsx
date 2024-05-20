@@ -54,3 +54,27 @@ export async function changeUserStatus(
     throw error;
   }
 }
+
+export async function changeUserRole(
+  userId: number,
+  role: string
+): Promise<User[]> {
+  try {
+    const response = await fetchWrapper(`${apiUrl}/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ role }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error getting data:", error);
+    throw error;
+  }
+}
