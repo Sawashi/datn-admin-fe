@@ -21,7 +21,6 @@ export async function login(
     if (!response.ok) {
       throw new Error("Failed to login");
     }
-
     return await response.json();
   } catch (error) {
     console.error("Error logging in:", error);

@@ -78,3 +78,23 @@ export async function changeUserRole(
     throw error;
   }
 }
+//get user by id
+export async function getUserById(userId: number): Promise<User> {
+  try {
+    const response = await fetchWrapper(`${apiUrl}/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error getting data:", error);
+    throw error;
+  }
+}
