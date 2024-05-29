@@ -3,10 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@components/redux/store";
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
   useEffect(() => {

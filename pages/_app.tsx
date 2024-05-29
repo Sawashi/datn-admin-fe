@@ -14,6 +14,8 @@ import { API_URL } from "src/constants";
 import { NextPage } from "next";
 import { BackTop, Layout } from "antd";
 import AuthProvider from "@components/providers/authProviders";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store, { RootState } from "@components/redux/store";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -100,16 +102,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   };
 
   return (
-    <ColorModeContextProvider>
-      <Refine
-        routerProvider={routerProvider}
-        authProvider={authProvider}
-        dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
-        resources={[]}
-      >
-        {renderComponent()}
-      </Refine>
-    </ColorModeContextProvider>
+    <Provider store={store}>
+      <ColorModeContextProvider>
+        <Refine
+          routerProvider={routerProvider}
+          authProvider={authProvider}
+          dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
+          resources={[]}
+        >
+          {renderComponent()}
+        </Refine>
+      </ColorModeContextProvider>
+    </Provider>
   );
 }
 

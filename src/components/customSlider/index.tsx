@@ -12,6 +12,10 @@ import {
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@components/redux/store";
+import { clear } from "console";
+import { clearUser } from "@components/redux/slices/userSlice";
 
 const { Sider } = Layout;
 
@@ -32,6 +36,8 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
     props.setSelectedKey(key);
   };
 
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div
@@ -90,6 +96,7 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
         danger
         onClick={() => {
           Cookies.set("accessToken", "");
+          dispatch(clearUser());
           message.info("Logged out");
           router.push("/login");
         }}
