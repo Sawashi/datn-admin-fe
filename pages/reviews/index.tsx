@@ -1,58 +1,95 @@
-import { Button, Spin, Table, TableProps, Typography } from "antd";
+import {
+  Button,
+  Spin,
+  Table,
+  TableProps,
+  Typography,
+  notification,
+} from "antd";
 import { useEffect, useState } from "react";
-import { Review, getAllReviewData } from "src/apis/reviews";
+import { Review, deleteReview, getAllReviewData } from "src/apis/reviews";
 const { Title } = Typography;
-
-const columns: TableProps<Review>["columns"] = [
-  {
-    title: "Author",
-    dataIndex: "user",
-    key: "user",
-    render: (user) => <a>{user.username}</a>,
-  },
-
-  {
-    title: "Content",
-    dataIndex: "content",
-    key: "content",
-  },
-  {
-    title: "Updated at",
-    key: "updatedAt",
-    dataIndex: "updatedAt",
-  },
-  {
-    title: "Action",
-    dataIndex: "address", // Change to "address" to check admin status
-    key: "address",
-    render: () => {
-      return (
-        <>
-          <Button type="primary" danger>
-            Delete
-          </Button>
-        </>
-      );
-    },
-  },
-];
 
 export default function reviewList() {
   const [data, setData] = useState<Review[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
-    const fetchAllCuisines = async () => {
+    const fetchAllCReviews = async () => {
       try {
         const rawData = await getAllReviewData();
+        console.log("rawData: ", rawData);
         setData(rawData);
       } catch (error) {
-        console.log("Something went wrong when get user data");
+        console.log("Something went wrong when get review data");
       } finally {
         setLoading(false); // Set loading to false when data fetching is done
       }
     };
-    fetchAllCuisines();
+    fetchAllCReviews();
   }, []);
+  const fetchAllCReviews = async () => {
+    try {
+      const rawData = await getAllReviewData();
+      setData(rawData);
+    } catch (error) {
+      console.log("Something went wrong when get review data");
+    } finally {
+      setLoading(false); // Set loading to false when data fetching is done
+    }
+  };
+  //handle delete review
+  const handleDeleteCuisine = async (reviewId: number) => {
+    try {
+      await deleteReview(reviewId);
+      notification.success({
+        message: "Review Deleted",
+        description: "The review has been successfully deleted.",
+      });
+      fetchAllCReviews();
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      notification.error({
+        message: "Error",
+        description: "Failed to delete review. Please try again later.",
+      });
+    }
+  };
+  const columns: TableProps<Review>["columns"] = [
+    {
+      title: "Author",
+      dataIndex: "user",
+      key: "user",
+      render: (user) => <a>{user.username}</a>,
+    },
+
+    {
+      title: "Content",
+      dataIndex: "content",
+      key: "content",
+    },
+    {
+      title: "Updated at",
+      key: "updatedAt",
+      dataIndex: "updatedAt",
+    },
+    {
+      title: "Action",
+      render: (record) => {
+        return (
+          <>
+            <Button
+              type="primary"
+              danger
+              onClick={() => handleDeleteCuisine(record.id)}
+            >
+              Delete
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
+
   return (
     <>
       <Title level={2}>Manage reviews</Title>

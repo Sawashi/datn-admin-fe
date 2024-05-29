@@ -29,3 +29,21 @@ export async function getAllReviewData(): Promise<Review[]> {
     throw error;
   }
 }
+//delete review
+export async function deleteReview(reviewId: number): Promise<void> {
+  try {
+    const response = await fetchWrapper(`${apiUrl}/reviews/${reviewId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete review");
+    }
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    throw error;
+  }
+}

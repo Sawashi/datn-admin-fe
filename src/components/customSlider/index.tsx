@@ -16,7 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@components/redux/store";
 import { clear } from "console";
 import { clearUser } from "@components/redux/slices/userSlice";
-
+import { Typography } from "antd";
+const { Title } = Typography;
 const { Sider } = Layout;
 
 interface SliderProps {
@@ -48,21 +49,25 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
           height: "64px",
         }}
       >
-        {/* Add your logo element here */}
-        <Image
+        {/* <Image
           width={60}
           src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"
+        /> */}
+        <Avatar
+          size={50}
+          style={{
+            backgroundColor: "#87d068",
+            margin: "10px auto",
+            display: "block",
+          }}
+          icon={<UserOutlined />}
         />
       </div>
-      <Avatar
-        size={40}
-        style={{
-          backgroundColor: "#87d068",
-          margin: "10px auto",
-          display: "block",
-        }}
-        icon={<UserOutlined />}
-      />
+
+      <Title level={2} style={{ textAlign: "center", color: "white" }}>
+        {user.username}
+      </Title>
+
       <Menu
         theme="dark"
         selectedKeys={[props.selectedKey]}
