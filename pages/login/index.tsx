@@ -8,8 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@components/redux/store";
 import { getUserById } from "src/apis/users";
 import { setUser } from "@components/redux/slices/userSlice";
-import Title from "antd/es/typography/Title";
+import { Typography } from "antd";
 
+const { Title } = Typography;
 const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
