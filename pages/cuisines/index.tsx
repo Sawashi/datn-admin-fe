@@ -184,7 +184,7 @@ export default function CuisineList() {
                       }}
                       bordered={false}
                     >
-                      <Title level={1}>{cuisine.cuisineName}</Title>
+                      <Title level={1}>{cuisine.name}</Title>
                     </Card>
                   </div>
                 </Col>

@@ -67,7 +67,7 @@ const EditCuisineModal: React.FC<EditCuisineModalProps> = ({
     >
       <Form form={form} initialValues={cuisine || {}}>
         <Form.Item
-          name="cuisineName"
+          name="name"
           label="Cuisine Name"
           rules={[{ required: true, message: "Please enter cuisine name" }]}
         >

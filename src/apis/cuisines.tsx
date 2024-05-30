@@ -5,7 +5,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Cuisine {
   id: number;
-  cuisineName: string;
+  name: string;
   description: string;
   imgUrl: string;
   dishes: Dish[];

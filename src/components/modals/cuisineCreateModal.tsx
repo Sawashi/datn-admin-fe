@@ -50,7 +50,7 @@ const CuisineCreateModel: React.FC<CuisineCreateModelProps> = ({
   const handleUploadImg = () => {
     if (img !== null) {
       const formData = new FormData();
-      formData.append("cuisineName", cuisineName);
+      formData.append("name", cuisineName);
       formData.append("description", description);
       formData.append("image", img);
 
