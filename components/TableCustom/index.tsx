@@ -114,19 +114,19 @@ function TableCustom<T extends Record<string, any>>({
       <Table
         onChange={onChange}
         onRow={onRow}
-        columns={hasEdit ? [...editColumn, ...columns] : columns}
+        columns={columns}
         dataSource={data}
-        rowSelection={
-          hasDelete
-            ? {
-                ...rowSelection,
-                columnWidth: 48,
-                onChange: (selectedRowKeys: React.Key[]) => {
-                  // OtherUtil.loadCallback(onSelectedRow, selectedRowKeys);
-                },
-              }
-            : rowSelection
-        }
+        // rowSelection={
+        //   hasDelete
+        //     ? {
+        //         ...rowSelection,
+        //         columnWidth: 48,
+        //         onChange: (selectedRowKeys: React.Key[]) => {
+        //           // OtherUtil.loadCallback(onSelectedRow, selectedRowKeys);
+        //         },
+        //       }
+        //     : rowSelection
+        // }
         scroll={{
           y: tableHeight,
           x: scrollH == false ? "" : "100vw",
