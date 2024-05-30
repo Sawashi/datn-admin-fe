@@ -56,6 +56,11 @@ export default function reviewList() {
   };
   const columns: TableProps<Review>["columns"] = [
     {
+      title: "Dish name",
+      key: "dish",
+      render: (record) => <a>{record.dish.dishName}</a>,
+    },
+    {
       title: "Author",
       dataIndex: "user",
       key: "user",
@@ -67,6 +72,7 @@ export default function reviewList() {
       dataIndex: "content",
       key: "content",
     },
+
     {
       title: "Updated at",
       key: "updatedAt",
