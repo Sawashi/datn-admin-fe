@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { Modal, Upload, Button, Input, notification, Image } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+  Modal,
+  Upload,
+  Button,
+  Input,
+  notification,
+  Image,
+  Select,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -10,6 +18,10 @@ interface DishCreateModelProps {
   onCancel: () => void;
   onCreated: () => void;
   cuisine: Cuisine | null;
+}
+interface Ingredient {
+  id: number;
+  ingredientName: string;
 }
 
 const DishCreateModel: React.FC<DishCreateModelProps> = ({
@@ -25,8 +37,27 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
   const [calories, setCalories] = useState<number>(0);
   const [author, setAuthor] = useState<string>("");
   const [directions, setDirections] = useState<string>("");
-  const [ingredients, setIngredients] = useState<string>("");
+  const [selectedIngredients, setSelectedIngredients] = useState<number[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const token = Cookies.get("accessToken");
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/ingredient`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setIngredients(response.data);
+      } catch (error) {
+        console.error("Error fetching ingredients:", error);
+      }
+    };
+    fetchIngredients();
+  }, []);
   const handleCreateDish = async (formData: FormData) => {
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/dish`, formData, {
@@ -70,7 +101,8 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
       formData.append("calories", calories.toString()); // Convert calories to string
       formData.append("author", author);
       formData.append("directions", directions);
-      formData.append("ingredients", ingredients);
+      formData.append("ingredients", JSON.stringify(selectedIngredients));
+      console.log("Ingredients", JSON.stringify(selectedIngredients));
       if (cuisine !== null) {
         formData.append("cuisines", cuisine.id.toString());
       } else {
@@ -121,12 +153,14 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
         value={servings}
         onChange={(e) => setServings(Number(e.target.value))}
         style={{ marginBottom: "10px" }}
+        type="number"
       />
       <Input
         placeholder="Calories"
         value={calories}
         onChange={(e) => setCalories(Number(e.target.value))}
         style={{ marginBottom: "10px" }}
+        type="number"
       />
       <Input
         placeholder="Author"
@@ -140,12 +174,19 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
         onChange={(e) => setDirections(e.target.value)}
         style={{ marginBottom: "10px" }}
       />
-      <Input.TextArea
-        placeholder="Ingredients"
-        value={ingredients}
-        onChange={(e) => setIngredients(e.target.value)}
-        style={{ marginBottom: "10px" }}
-      />
+      <Select
+        mode="multiple"
+        placeholder="Select Ingredients"
+        value={selectedIngredients}
+        onChange={(value) => setSelectedIngredients(value)}
+        style={{ marginBottom: "10px", width: "100%" }}
+      >
+        {ingredients.map((ingredient) => (
+          <Select.Option key={ingredient.id} value={ingredient.id}>
+            {ingredient.ingredientName}
+          </Select.Option>
+        ))}
+      </Select>
 
       {img ? (
         <div>
