@@ -1,3 +1,5 @@
+import fetchWrapper from "./fetchWrapper";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Dish {
@@ -11,7 +13,7 @@ export interface Dish {
 }
 
 export async function createDish(data: Partial<Dish>) {
-	const response = await fetch(`${apiUrl}/dishes`, {
+	const response = await fetchWrapper(`${apiUrl}/dishes`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -22,7 +24,7 @@ export async function createDish(data: Partial<Dish>) {
 }
 //delete dish
 export async function deleteDish(dishId: number) {
-	const response = await fetch(`${apiUrl}/dish/${dishId}`, {
+	const response = await fetchWrapper(`${apiUrl}/dish/${dishId}`, {
 		method: "DELETE",
 	});
 	return response.json();
