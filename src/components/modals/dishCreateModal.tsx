@@ -7,6 +7,7 @@ import {
 	notification,
 	Image,
 	Select,
+	Form,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -20,9 +21,15 @@ interface DishCreateModelProps {
 	onCreated: () => void;
 	cuisine: Cuisine | null;
 }
+
 interface Ingredient {
 	id: number;
 	ingredientName: string;
+}
+
+interface IngredientWithMass {
+	ingredientName: string;
+	mass: string;
 }
 
 const DishCreateModel: React.FC<DishCreateModelProps> = ({
@@ -38,9 +45,12 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
 	const [calories, setCalories] = useState<number>(0);
 	const [author, setAuthor] = useState<string>("");
 	const [directions, setDirections] = useState<string>("");
-	const [selectedIngredients, setSelectedIngredients] = useState<number[]>([]);
+	const [ingredientMasses, setIngredientMasses] = useState<
+		IngredientWithMass[]
+	>([]);
 	const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 	const token = Cookies.get("accessToken");
+
 	useEffect(() => {
 		const fetchIngredients = async () => {
 			try {
@@ -60,6 +70,7 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
 		};
 		fetchIngredients();
 	}, []);
+
 	const handleCreateDish = async (formData: FormData) => {
 		try {
 			await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/dish`, formData, {
@@ -85,20 +96,8 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
 	};
 
 	const handleUploadImg = () => {
-		// "cookingTime": "string",
-		// "dishName": "string",
-		// "servings": 0,
-		// "calories": 0,
-		// "author": "string",
-		// "directions": "string",
-		// "ingredients": "string",
-		// "cuisines": 0
 		if (img !== null) {
 			const formData = new FormData();
-			const ingredientsToSend: Ingredient[] = ingredients.filter((item) =>
-				selectedIngredients.includes(item.id)
-			);
-
 			formData.append("image", img);
 			formData.append("cookingTime", cookingTime);
 			formData.append("dishName", dishName);
@@ -106,7 +105,17 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
 			formData.append("calories", calories.toString()); // Convert calories to string
 			formData.append("author", author);
 			formData.append("directions", directions);
-			formData.append("ingredients", JSON.stringify(ingredientsToSend));
+			//formData.append("ingredients", JSON.stringify(ingredientMasses));
+			for (let i = 0; i < ingredientMasses.length; i++) {
+				formData.append(
+					"ingredients[" + i + "][ingredientName]",
+					JSON.stringify(ingredientMasses[i].ingredientName)
+				);
+				formData.append(
+					"ingredients[" + i + "][mass]",
+					JSON.stringify(ingredientMasses[i].mass)
+				);
+			}
 			if (cuisine !== null) {
 				formData.append("cuisines", cuisine.id.toString());
 			} else {
@@ -117,8 +126,34 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
 	};
 
 	const handleRemove = () => {
-		// Clear the selected file
 		setImg(null);
+	};
+
+	const handleAddIngredient = () => {
+		setIngredientMasses([
+			...ingredientMasses,
+			{ ingredientName: "", mass: "" },
+		]);
+	};
+
+	const handleIngredientChange = (
+		index: number,
+		field: string,
+		value: string
+	) => {
+		const newIngredientMasses = [...ingredientMasses];
+		if (field === "ingredientName") {
+			newIngredientMasses[index].ingredientName = value;
+		} else {
+			newIngredientMasses[index].mass = value;
+		}
+		setIngredientMasses(newIngredientMasses);
+	};
+
+	const handleRemoveIngredient = (index: number) => {
+		const newIngredientMasses = [...ingredientMasses];
+		newIngredientMasses.splice(index, 1);
+		setIngredientMasses(newIngredientMasses);
 	};
 
 	return (
@@ -183,19 +218,44 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
 				onChange={(e) => setDirections(e.target.value)}
 				style={{ marginBottom: "10px" }}
 			/>
-			<Select
-				mode="multiple"
-				placeholder="Select Ingredients"
-				value={selectedIngredients}
-				onChange={(value) => setSelectedIngredients(value)}
-				style={{ marginBottom: "10px", width: "100%" }}
-			>
-				{ingredients.map((ingredient) => (
-					<Select.Option key={ingredient.id} value={ingredient.id}>
-						{ingredient.ingredientName}
-					</Select.Option>
+
+			<Form>
+				{ingredientMasses.map((item, index) => (
+					<div key={index} style={{ marginBottom: "10px" }}>
+						<Select
+							placeholder="Select Ingredient"
+							value={item.ingredientName}
+							onChange={(value) =>
+								handleIngredientChange(index, "ingredientName", value)
+							}
+							style={{ width: "60%", marginRight: "10px" }}
+						>
+							{ingredients.map((ingredient) => (
+								<Select.Option
+									key={ingredient.id}
+									value={ingredient.ingredientName}
+								>
+									{ingredient.ingredientName}
+								</Select.Option>
+							))}
+						</Select>
+						<Input
+							placeholder="Mass"
+							value={item.mass}
+							onChange={(e) =>
+								handleIngredientChange(index, "mass", e.target.value)
+							}
+							style={{ width: "30%", marginRight: "10px" }}
+						/>
+						<Button onClick={() => handleRemoveIngredient(index)} danger>
+							Remove
+						</Button>
+					</div>
 				))}
-			</Select>
+				<Button onClick={handleAddIngredient} type="dashed">
+					Add Ingredient
+				</Button>
+			</Form>
 
 			{img ? (
 				<div>
@@ -212,7 +272,6 @@ const DishCreateModel: React.FC<DishCreateModelProps> = ({
 				<Upload.Dragger
 					fileList={[]}
 					beforeUpload={(newFile) => {
-						// Allow only one file to be uploaded
 						setImg(newFile);
 						return false;
 					}}
