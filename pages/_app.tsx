@@ -18,103 +18,103 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@components/redux/store";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  noLayout?: boolean;
+	noLayout?: boolean;
 };
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+	Component: NextPageWithLayout;
 };
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
-  const { mode } = useContext(ColorModeContext);
-  const router = useRouter();
-  const { pathname } = router;
-  const pathSegments = pathname.split("/");
-  const lastSegment = pathSegments[pathSegments.length - 1];
-  const [selectedKey, setSelectedKey] = useState("1");
+	const { mode } = useContext(ColorModeContext);
+	const router = useRouter();
+	const { pathname } = router;
+	const pathSegments = pathname.split("/");
+	const lastSegment = pathSegments[pathSegments.length - 1];
+	const [selectedKey, setSelectedKey] = useState("1");
 
-  useEffect(() => {
-    setSelectedKey(lastSegment);
-  }, []);
+	useEffect(() => {
+		setSelectedKey(lastSegment);
+	}, []);
 
-  const setSelectedKeyHandler = (key: string) => {
-    setSelectedKey(key);
-  };
+	const setSelectedKeyHandler = (key: string) => {
+		setSelectedKey(key);
+	};
 
-  // Determine background color based on mode
-  const backgroundColor = mode === "dark" ? "black" : "white";
-  // Check if current route is "/login" or "/register"
-  const shouldUseSidebar = pathname === "/login" || pathname === "/register";
-  if (shouldUseSidebar) {
-    return (
-      <Layout style={{ minHeight: "100vh" }}>
-        <Layout>
-          <Layout.Content
-            style={{
-              padding: "20px",
-              backgroundColor: backgroundColor,
-              minHeight: 280,
-            }}
-          >
-            {children}
-            <BackTop />
-          </Layout.Content>
-        </Layout>
-      </Layout>
-    );
-  } else {
-    return (
-      <Layout style={{ minHeight: "100vh" }}>
-        <CustomSlider
-          selectedKey={selectedKey}
-          setSelectedKey={setSelectedKeyHandler}
-        />
-        <Layout>
-          <Layout.Content
-            style={{
-              padding: "20px",
-              backgroundColor: backgroundColor,
-              minHeight: 280,
-            }}
-          >
-            {children}
-            <BackTop />
-          </Layout.Content>
-        </Layout>
-      </Layout>
-    );
-  }
+	// Determine background color based on mode
+	const backgroundColor = mode === "dark" ? "black" : "white";
+	// Check if current route is "/login" or "/register"
+	const shouldUseSidebar = pathname === "/login" || pathname === "/register";
+	if (shouldUseSidebar) {
+		return (
+			<Layout style={{ minHeight: "100vh" }}>
+				<Layout>
+					<Layout.Content
+						style={{
+							padding: "20px",
+							backgroundColor: backgroundColor,
+							minHeight: 280,
+						}}
+					>
+						{children}
+						<BackTop />
+					</Layout.Content>
+				</Layout>
+			</Layout>
+		);
+	} else {
+		return (
+			<Layout style={{ minHeight: "100vh" }}>
+				<CustomSlider
+					selectedKey={selectedKey}
+					setSelectedKey={setSelectedKeyHandler}
+				/>
+				<Layout>
+					<Layout.Content
+						style={{
+							padding: "20px",
+							backgroundColor: backgroundColor,
+							minHeight: 280,
+						}}
+					>
+						{children}
+						<BackTop />
+					</Layout.Content>
+				</Layout>
+			</Layout>
+		);
+	}
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
-  const renderComponent = () => {
-    if (Component.noLayout) {
-      return <Component {...pageProps} />;
-    }
+	const renderComponent = () => {
+		if (Component.noLayout) {
+			return <Component {...pageProps} />;
+		}
 
-    return (
-      <AuthProvider>
-        <CustomLayout>
-          <Component {...pageProps} />
-        </CustomLayout>
-      </AuthProvider>
-    );
-  };
+		return (
+			<AuthProvider>
+				<CustomLayout>
+					<Component {...pageProps} />
+				</CustomLayout>
+			</AuthProvider>
+		);
+	};
 
-  return (
-    <Provider store={store}>
-      <ColorModeContextProvider>
-        <Refine
-          routerProvider={routerProvider}
-          authProvider={authProvider}
-          dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
-          resources={[]}
-        >
-          {renderComponent()}
-        </Refine>
-      </ColorModeContextProvider>
-    </Provider>
-  );
+	return (
+		<Provider store={store}>
+			<ColorModeContextProvider>
+				<Refine
+					routerProvider={routerProvider}
+					authProvider={authProvider}
+					dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
+					resources={[]}
+				>
+					{renderComponent()}
+				</Refine>
+			</ColorModeContextProvider>
+		</Provider>
+	);
 }
 
 export default appWithTranslation(MyApp);
