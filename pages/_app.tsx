@@ -59,31 +59,31 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
       case '/users':
         return (
           <Head>
-            <title>Manage User</title>
+            <title>Manage Users</title>
           </Head>
         )
       case '/category':
         return (
           <Head>
-            <title>Manage Category</title>
+            <title>Manage Categories</title>
           </Head>
         )
       case '/cuisines':
         return (
           <Head>
-            <title>Manage Cuisine</title>
+            <title>Manage Cuisines</title>
           </Head>
         )
       case '/reviews':
         return (
           <Head>
-            <title>Manage Review</title>
+            <title>Manage Reviews</title>
           </Head>
         )
       case '/feedbacks':
         return (
           <Head>
-            <title>Manage Feedback</title>
+            <title>Manage Feedbacks</title>
           </Head>
         )
 
