@@ -1,124 +1,124 @@
-import { Button, Image, Spin, Table, Typography, notification } from "antd";
-import { useEffect, useState } from "react";
+import { Button, Image, Spin, Table, Typography, notification } from 'antd'
+import { useEffect, useState } from 'react'
 import {
   Category,
   deleteCategory,
   getAllCategoryData,
-} from "src/apis/categories";
-import CategoryCreateModel from "@components/modals/categoryCreateModal";
-import CategoryEditModel from "@components/modals/categoryEditModal"; // Import the edit modal
+} from 'src/apis/categories'
+import CategoryCreateModel from '@components/modals/categoryCreateModal'
+import CategoryEditModel from '@components/modals/categoryEditModal' // Import the edit modal
 
-const { Title } = Typography;
+const { Title } = Typography
 
 export default function CategorieList() {
-  const [data, setData] = useState<Category[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editModalVisible, setEditModalVisible] = useState(false); // State for edit modal
+  const [data, setData] = useState<Category[]>([])
+  const [modalVisible, setModalVisible] = useState(false)
+  const [editModalVisible, setEditModalVisible] = useState(false) // State for edit modal
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
-  ); // State to store selected category for editing
-  const [loading, setLoading] = useState<boolean>(true);
+  ) // State to store selected category for editing
+  const [loading, setLoading] = useState<boolean>(true)
 
   const fetchAllCategories = async () => {
     try {
-      const rawData = await getAllCategoryData();
-      setData(rawData);
+      const rawData = await getAllCategoryData()
+      setData(rawData)
     } catch (error) {
-      console.log("Something went wrong when fetching category data");
+      console.log('Something went wrong when fetching category data')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchAllCategories();
-  }, []);
+    fetchAllCategories()
+  }, [])
 
   const handleModalOpen = () => {
-    setModalVisible(true);
-  };
+    setModalVisible(true)
+  }
 
   const handleModalCancel = () => {
-    setModalVisible(false);
-  };
+    setModalVisible(false)
+  }
 
   const handleEditModalOpen = (category: Category) => {
-    setSelectedCategory(category);
-    setEditModalVisible(true);
-  };
+    setSelectedCategory(category)
+    setEditModalVisible(true)
+  }
 
   const handleEditModalCancel = () => {
-    setSelectedCategory(null);
-    setEditModalVisible(false);
-  };
+    setSelectedCategory(null)
+    setEditModalVisible(false)
+  }
 
   const handleDeleteCategory = async (categoryId: number) => {
     try {
-      await deleteCategory(categoryId);
+      await deleteCategory(categoryId)
       notification.success({
-        message: "Category Deleted",
-        description: "The category has been successfully deleted.",
-      });
-      fetchAllCategories();
+        message: 'Category Deleted',
+        description: 'The category has been successfully deleted.',
+      })
+      fetchAllCategories()
     } catch (error) {
-      console.error("Error deleting category:", error);
+      console.error('Error deleting category:', error)
       notification.error({
-        message: "Error",
-        description: "Failed to delete category. Please try again later.",
-      });
+        message: 'Error',
+        description: 'Failed to delete category. Please try again later.',
+      })
     }
-  };
+  }
 
   const columnsNew = [
     {
-      title: "Image",
-      key: "imgUrl",
-      dataIndex: "imgUrl",
+      title: 'Image',
+      key: 'imgUrl',
+      dataIndex: 'imgUrl',
       render: (image: string) => <Image src={image} width={100} />,
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
-      title: "Action",
-      key: "action",
+      title: 'Action',
+      key: 'action',
       render: (record: Category) => {
         return (
           <>
-            <Button type="primary" onClick={() => handleEditModalOpen(record)}>
+            <Button type='primary' onClick={() => handleEditModalOpen(record)}>
               Edit
-            </Button>{" "}
+            </Button>{' '}
             <Button
-              type="primary"
+              type='primary'
               danger
               onClick={() => {
-                handleDeleteCategory(record.id);
+                handleDeleteCategory(record.id)
               }}
             >
               Delete
             </Button>
           </>
-        );
+        )
       },
     },
-  ];
+  ]
 
   return (
     <>
-      <Title level={2}>Manage categories</Title>
-      <div style={{ marginBottom: "16px", textAlign: "right" }}>
+      <Title level={2}>Manage Categories</Title>
+      <div style={{ marginBottom: '16px', textAlign: 'right' }}>
         <Button
-          type="primary"
-          style={{ margin: "8px 0" }}
+          type='primary'
+          style={{ margin: '8px 0' }}
           onClick={handleModalOpen}
         >
           Create a new category
         </Button>
       </div>
       {loading ? (
-        <Spin size="large" />
+        <Spin size='large' />
       ) : (
         <Table columns={columnsNew} dataSource={data} bordered={true} />
       )}
@@ -134,5 +134,6 @@ export default function CategorieList() {
         onRefresh={fetchAllCategories}
       />
     </>
-  );
+  )
 }
+

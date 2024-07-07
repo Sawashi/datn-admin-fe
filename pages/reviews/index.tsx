@@ -129,7 +129,7 @@ export default function reviewList() {
 
   return (
     <>
-      <Title level={2}>Manage reviews</Title>
+      <Title level={2}>Manage Reviews</Title>
       <div>
         <Button
           type='primary'

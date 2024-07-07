@@ -135,7 +135,7 @@ export default function CategorieList() {
 
   return (
     <>
-      <Title level={2}>Manage feedbacks</Title>
+      <Title level={2}>Manage Feedbacks</Title>
 
       {loading ? (
         <Spin size='large' />
