@@ -90,6 +90,13 @@ export default function reviewList() {
       dataIndex: 'content',
       key: 'content',
     },
+    {
+      title: 'Total Report',
+      dataIndex: 'reportReviews',
+      key: 'reportReviews',
+      align: 'right',
+      render: (reportReviews) => <span>{reportReviews?.length}</span>,
+    },
 
     {
       title: 'Updated at',
