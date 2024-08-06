@@ -104,6 +104,8 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
       onCloseModal()
     } catch (error) {
       console.log('Something went wrong', error)
+    } finally {
+      form.resetFields()
     }
   }
 
@@ -137,7 +139,7 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
     <Modal
       open={isOpen}
       onCancel={onCloseModal}
-      title={'Create Event Modal'}
+      title={defaultValues ? 'Edit Event Modal' : 'Create Event Modal'}
       footer={null}
     >
       <Form layout='vertical' form={form} onFinish={onSubmit}>
