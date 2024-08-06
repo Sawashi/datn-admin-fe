@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { Modal, Upload, Form, Input, DatePicker, Button } from 'antd'
+import { Modal, Upload, Form, Input, DatePicker, Button, Select } from 'antd'
 import { RcFile } from 'antd/es/upload'
 import React, { useState } from 'react'
 
@@ -30,7 +30,7 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
           label='Title'
           required
           name={'eventName'}
-          rules={[{ required: true, message: 'Please input title!' }]}
+          rules={[{ required: true, message: 'Please input title' }]}
         >
           <Input />
         </Form.Item>
@@ -38,16 +38,13 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
           label='Thumbnail'
           required
           name={'imageUrl'}
-          rules={[{ required: true, message: 'Please select image!' }]}
+          rules={[{ required: true, message: 'Please select image' }]}
         >
           <Upload.Dragger
             fileList={[]}
             beforeUpload={(newFile) => {
               setImg(newFile)
               return false
-            }}
-            style={{
-              marginBottom: 16,
             }}
           >
             <p className='ant-upload-drag-icon'>
@@ -63,7 +60,7 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
           label='Start Time'
           required
           name={'startTime'}
-          rules={[{ required: true, message: 'Please input start time!' }]}
+          rules={[{ required: true, message: 'Please input start time' }]}
         >
           <DatePicker />
         </Form.Item>
@@ -71,7 +68,7 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
           label='Event Time'
           required
           name={'endTime'}
-          rules={[{ required: true, message: 'Please input end time!' }]}
+          rules={[{ required: true, message: 'Please input end time' }]}
         >
           <DatePicker />
         </Form.Item>
@@ -79,9 +76,22 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
           label='Reward'
           required
           name={'reward'}
-          rules={[{ required: true, message: 'Please input reward!' }]}
+          rules={[{ required: true, message: 'Please input reward' }]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          label='Dishes'
+          required
+          name={'reward'}
+          rules={[{ required: true, message: 'Please select dish' }]}
+        >
+          <Select
+            options={[]}
+            mode='multiple'
+            allowClear
+            placeholder={'Please select dish'}
+          />
         </Form.Item>
 
         <Form.Item>
