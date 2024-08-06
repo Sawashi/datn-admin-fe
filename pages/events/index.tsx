@@ -1,17 +1,17 @@
-import { DeleteOutlined, EyeFilled } from '@ant-design/icons'
-import { Button, Image, Spin, Table, Tag, Typography, notification } from 'antd'
+import { ExclamationCircleOutlined, EyeFilled } from '@ant-design/icons'
+import CreateEventModal from '@components/modals/CreateEventModal'
+import {
+  Button,
+  Image,
+  Spin,
+  Table,
+  Typography,
+  notification,
+  Modal,
+} from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
-import {
-  TDish,
-  TEvent,
-  TFeedback,
-  deleteFeedback,
-  getAllEvent,
-  getAllFeedback,
-} from 'src/apis/categories'
-import { useRouter } from 'next/router'
-import CreateEventModal from '@components/modals/CreateEventModal'
+import { DeleteEvent, TDish, TEvent, getAllEvent } from 'src/apis/categories'
 
 const { Title } = Typography
 
@@ -20,6 +20,9 @@ export default function EventList() {
 
   const [loading, setLoading] = useState<boolean>(true)
   const [openCreateModal, setOpenCreateModal] = useState(false)
+  const [openEditModal, setOpenEditModal] = useState(false)
+  const [currentEvent, setCurrentEvent] = useState<TEvent>()
+  const [modal, contextHolder] = Modal.useModal()
 
   const fetchAllFeedbacks = async () => {
     try {
@@ -35,6 +38,40 @@ export default function EventList() {
   useEffect(() => {
     fetchAllFeedbacks()
   }, [])
+
+  const handleDeleteEvent = async (eventId: number) => {
+    try {
+      await DeleteEvent(eventId)
+
+      notification.success({
+        message: 'Event deleted',
+        description: 'The Event has been successfully deleted.',
+      })
+      await fetchAllFeedbacks()
+    } catch (error) {
+      notification.error({
+        message: 'Failed',
+        description: 'The Event delete failed.',
+      })
+      console.log('Something went wrong', error)
+    }
+  }
+
+  const confirm = (record: TEvent) => {
+    modal.confirm({
+      title: 'Confirm',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Do you want delete this event?',
+      okText: 'OK',
+      cancelText: 'Cancel',
+      onCancel: () => {
+        return
+      },
+      onOk: () => {
+        handleDeleteEvent(record.id)
+      },
+    })
+  }
 
   const columnsNew = [
     {
@@ -63,7 +100,7 @@ export default function EventList() {
               <Image
                 src={imageUrl}
                 width={200}
-                height={80}
+                height={60}
                 style={{
                   objectFit: 'cover',
                 }}
@@ -83,7 +120,7 @@ export default function EventList() {
       title: 'Event Name',
       dataIndex: 'eventName',
       key: 'eventName',
-      width: '40%',
+      width: '20%',
     },
     {
       title: 'Start Time',
@@ -112,8 +149,53 @@ export default function EventList() {
         return (
           <div>
             {dishes.map((item, index) => (
-              <div style={{}}>{`${index + 1}. ${item.dishName}`}</div>
+              <div style={{}}>
+                {`${index + 1}. ${item.dishName} by `}
+                <span
+                  style={{
+                    fontWeight: 700,
+                  }}
+                >
+                  {item.author}
+                </span>
+              </div>
             ))}
+          </div>
+        )
+      },
+    },
+    {
+      title: 'Action',
+      dataIndex: 'reward',
+      key: 'reward',
+      width: 200,
+      render: (_reward: string, record: TEvent) => {
+        return (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
+          >
+            <Button
+              type='primary'
+              danger
+              onClick={() => {
+                confirm(record)
+              }}
+            >
+              Delete
+            </Button>
+            <Button
+              type='primary'
+              onClick={() => {
+                setOpenEditModal(true)
+                setCurrentEvent(record)
+              }}
+            >
+              Edit
+            </Button>
           </div>
         )
       },
@@ -145,7 +227,20 @@ export default function EventList() {
         />
       )}
 
-      <CreateEventModal isOpen={openCreateModal} setOpen={setOpenCreateModal} />
+      <CreateEventModal
+        isOpen={openCreateModal}
+        setOpen={setOpenCreateModal}
+        refetch={fetchAllFeedbacks}
+      />
+
+      <CreateEventModal
+        isOpen={openEditModal}
+        setOpen={setOpenEditModal}
+        refetch={fetchAllFeedbacks}
+        defaultValues={currentEvent}
+      />
+
+      {contextHolder}
     </>
   )
 }

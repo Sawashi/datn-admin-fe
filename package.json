@@ -29,6 +29,7 @@
     "axios": "^1.6.2",
     "cloudinary": "^2.2.0",
     "d3-ease": "^3.0.1",
+    "dayjs": "^1.11.12",
     "eslint": "^8.57.0",
     "firebase": "^10.11.0",
     "firebase-tools": "^13.7.2",

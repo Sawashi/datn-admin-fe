@@ -23,6 +23,7 @@ export interface TFeedback {
 export type TDish = {
   id: number
   dishName: string
+  author: string
 }
 export interface TEvent {
   id: number
@@ -30,6 +31,7 @@ export interface TEvent {
   reward: string
   startTime: string
   endTime: string
+  imageUrl: string
   dishes: TDish[]
 }
 
@@ -138,6 +140,43 @@ export async function getAllEvent(): Promise<TEvent[]> {
       headers: {
         'Content-Type': 'application/json',
       },
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Error getting data:', error)
+    throw error
+  }
+}
+
+export async function DeleteEvent(eventId: number): Promise<void> {
+  try {
+    const response = await fetchWrapper(`${apiUrl}/events/${eventId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+  } catch (error) {
+    console.error('Error getting data:', error)
+    throw error
+  }
+}
+
+export async function CreateEvent(formData: FormData): Promise<TEvent[]> {
+  try {
+    const response = await fetchWrapper(`${apiUrl}/events`, {
+      method: 'POST',
+
+      body: formData,
     })
 
     if (!response.ok) {

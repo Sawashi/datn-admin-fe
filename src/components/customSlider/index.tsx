@@ -10,6 +10,7 @@ import {
   StarOutlined,
   LogoutOutlined,
   FormOutlined,
+  GlobalOutlined,
 } from '@ant-design/icons'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
@@ -118,7 +119,7 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
         <Menu.Item key='feedbacks' icon={<FormOutlined />}>
           <Link href='/feedbacks'>Feedbacks</Link>
         </Menu.Item>
-        <Menu.Item key='events' icon={<FormOutlined />}>
+        <Menu.Item key='events' icon={<GlobalOutlined />}>
           <Link href='/events'>Events</Link>
         </Menu.Item>
       </Menu>
