@@ -20,6 +20,19 @@ export interface TFeedback {
   }
 }
 
+export type TDish = {
+  id: number
+  dishName: string
+}
+export interface TEvent {
+  id: number
+  eventName: string
+  reward: string
+  startTime: string
+  endTime: string
+  dishes: TDish[]
+}
+
 export async function createCategory(categoryData: Category): Promise<void> {
   try {
     const response = await fetchWrapper(`${apiUrl}/categories`, {
@@ -101,6 +114,26 @@ export async function editCategory(categoryData: Category): Promise<void> {
 export async function getAllFeedback(): Promise<TFeedback[]> {
   try {
     const response = await fetchWrapper(`${apiUrl}/feedback-apps`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Error getting data:', error)
+    throw error
+  }
+}
+
+export async function getAllEvent(): Promise<TEvent[]> {
+  try {
+    const response = await fetchWrapper(`${apiUrl}/events`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

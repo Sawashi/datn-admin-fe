@@ -86,6 +86,12 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
             <title>Manage Feedbacks</title>
           </Head>
         )
+      case '/events':
+        return (
+          <Head>
+            <title>Manage Events</title>
+          </Head>
+        )
 
       default:
         return (

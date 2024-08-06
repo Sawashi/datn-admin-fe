@@ -118,6 +118,9 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
         <Menu.Item key='feedbacks' icon={<FormOutlined />}>
           <Link href='/feedbacks'>Feedbacks</Link>
         </Menu.Item>
+        <Menu.Item key='events' icon={<FormOutlined />}>
+          <Link href='/events'>Events</Link>
+        </Menu.Item>
       </Menu>
       <div
         style={{
