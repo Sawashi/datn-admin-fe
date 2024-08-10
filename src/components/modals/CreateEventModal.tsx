@@ -16,12 +16,15 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { TEvent } from 'src/apis/categories'
 
+const { TextArea } = Input
+
 type TForm = {
   eventName: string
   imageUrl: RcFile
   startTime: string
   endTime: string
   reward: string
+  description: string
 }
 
 type TCreateEventModalProps = {
@@ -93,6 +96,7 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
       formData.append('startTime', dayjs(values.startTime).format('YYYY-MM-DD'))
       formData.append('endTime', dayjs(values.endTime).format('YYYY-MM-DD'))
       formData.append('reward', values.reward)
+      formData.append('description', values.description)
 
       if (defaultValues) {
         await handleUpdateEvent(defaultValues.id, formData)
@@ -199,6 +203,15 @@ const CreateEventModal = (props: TCreateEventModalProps) => {
           rules={[{ required: true, message: 'Please input reward' }]}
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item
+          label='Description'
+          required
+          name={'description'}
+          rules={[{ required: true, message: 'Please input description' }]}
+        >
+          <TextArea rows={4} />
         </Form.Item>
 
         <Form.Item>

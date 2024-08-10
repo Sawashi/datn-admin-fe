@@ -8,6 +8,7 @@ import {
   Typography,
   notification,
   Modal,
+  Tooltip,
 } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
@@ -120,7 +121,7 @@ export default function EventList() {
       title: 'Event Name',
       dataIndex: 'eventName',
       key: 'eventName',
-      width: '20%',
+      width: '10%',
     },
     {
       title: 'Start Time',
@@ -139,6 +140,14 @@ export default function EventList() {
       dataIndex: 'reward',
       key: 'reward',
       width: 120,
+      ellipsis: true,
+      return: (reward: string) => {
+        return (
+          <Tooltip title={reward} placement='top'>
+            <div>{reward}</div>
+          </Tooltip>
+        )
+      },
     },
     {
       title: 'Dishes',
@@ -163,6 +172,13 @@ export default function EventList() {
           </div>
         )
       },
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+      width: 200,
+      ellipsis: true,
     },
     {
       title: 'Action',
@@ -205,7 +221,12 @@ export default function EventList() {
   return (
     <>
       <Title level={2}>Manage Events</Title>
-      <div style={{ marginBottom: '16px', textAlign: 'right' }}>
+      <div
+        style={{
+          marginBottom: '16px',
+          textAlign: 'right',
+        }}
+      >
         <Button
           onClick={() => {
             setOpenCreateModal(true)
