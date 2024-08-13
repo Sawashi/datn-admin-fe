@@ -35,6 +35,18 @@ export interface TEvent {
   dishes: TDish[]
 }
 
+export interface TUser {
+  id: number
+  username: string
+}
+
+export interface TReport {
+  id: number
+  content: string
+  dish: TDish
+  user: TUser
+}
+
 export async function createCategory(categoryData: Category): Promise<void> {
   try {
     const response = await fetchWrapper(`${apiUrl}/categories`, {
@@ -136,6 +148,26 @@ export async function getAllFeedback(): Promise<TFeedback[]> {
 export async function getAllEvent(): Promise<TEvent[]> {
   try {
     const response = await fetchWrapper(`${apiUrl}/events`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Error getting data:', error)
+    throw error
+  }
+}
+
+export async function getAllReport(): Promise<TReport[]> {
+  try {
+    const response = await fetchWrapper(`${apiUrl}/reports`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

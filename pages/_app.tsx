@@ -74,6 +74,13 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
             <title>Manage Cuisines</title>
           </Head>
         )
+
+      case '/report-dish':
+        return (
+          <Head>
+            <title>Manage Report Dish</title>
+          </Head>
+        )
       case '/reviews':
         return (
           <Head>
